@@ -1,0 +1,12 @@
+.unsaved-dialog { width: min(420px, calc(100vw - 32px)); padding: 28px; border: 1px solid #e2e8e4; border-radius: 22px; background: #fff; color: #203b2f; box-shadow: 0 24px 90px #102d3040; font-family: Arial, Helvetica, sans-serif; }
+.unsaved-dialog::backdrop { background: #10282080; backdrop-filter: blur(5px); }
+.unsaved-icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 20px; border-radius: 16px; background: #fff4dc; color: #a66b16; }
+.unsaved-dialog h2 { margin: 0 0 12px; font-size: 23px; line-height: 1.25; letter-spacing: -.6px; font-weight: 600; }
+.unsaved-dialog p { margin: 0; font-size: 14px; line-height: 1.7; color: #64746b; }
+.unsaved-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.unsaved-actions button { min-height: 44px; padding: 11px 16px; border-radius: 10px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.unsaved-discard { border: 1px solid #e4d8d8; background: #fff; color: #a13e3e; }
+.unsaved-discard:hover { background: #fff1f1; }
+.unsaved-keep { border: 1px solid #166a42; background: #166a42; color: #fff; }
+.unsaved-keep:hover { background: #115433; }
+.unsaved-actions button:focus-visible { outline: 2px solid #166a42; outline-offset: 3px; }

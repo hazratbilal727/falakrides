@@ -1,0 +1,16 @@
+"use client";
+import {useEffect, useState} from "react";
+import {api} from "@/lib/api-client";
+import Icon from "@/components/ui/icon";
+
+type HistoryBooking = {reference: string; pickup: string; destination: string; date: string; time: string; vehicle: string; passengers: number; status: string; version: number; fare: number | null};
+export default function BookingHistory() {
+  const [bookings, setBookings] = useState<HistoryBooking[]>([]);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [confirm, setConfirm] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {let active = true; const load = async () => {try {const result = await api<{bookings: HistoryBooking[]}>("/api/bookings"); if (active) {setBookings(result.bookings); setMessage("");}} catch (error) {if (active) setMessage(error instanceof Error ? error.message : "Unable to load bookings.");} finally {if (active) setLoading(false);}}; void load(); const timer = setInterval(load, 5000); return () => {active = false; clearInterval(timer);};}, []);
+  async function cancel(booking: HistoryBooking) {if (busy) return; setBusy(true); try {const result = await api<{booking: HistoryBooking}>(`/api/bookings/${encodeURIComponent(booking.reference)}`, {method: "PATCH", body: JSON.stringify({action: "cancel", version: booking.version})}); setBookings(current => current.map(item => item.reference === booking.reference ? result.booking : item)); setConfirm(null);} catch (error) {setMessage(error instanceof Error ? error.message : "Unable to cancel booking.");} finally {setBusy(false);}}
+  return <div className="public-prose"><h2>Your bookings</h2>{message && <p role="alert">{message}</p>}{loading && <p role="status">Loading your bookings...</p>}{!loading && !bookings.length && <p>No bookings have been requested on this device yet.</p>}{bookings.map(booking => <article className="offer-note" key={booking.reference}><h3>{booking.pickup} → {booking.destination}</h3><p><strong>{booking.reference}</strong> · {booking.status}<br/>{booking.date} · {booking.time} KSA<br/>{booking.vehicle} · {booking.passengers} passengers<br/>{booking.fare === null ? "Quote required" : `SAR ${booking.fare.toFixed(2)}`}</p>{["Pending", "Confirmed"].includes(booking.status) && <div className="actions"><button type="button" className="button" onClick={() => window.dispatchEvent(new CustomEvent("falak:edit-booking", {detail: booking.reference}))}>Reschedule<Icon name="clock" size={17}/></button><button type="button" className="text-button" onClick={() => setConfirm(booking.reference)}>Cancel</button></div>}{confirm === booking.reference && <div role="alert"><p>Cancel this booking?</p><button type="button" className="button" disabled={busy} onClick={() => {void cancel(booking);}}>Yes, cancel</button><button type="button" className="text-button" onClick={() => setConfirm(null)}>Keep booking</button></div>}</article>)}</div>;
+}

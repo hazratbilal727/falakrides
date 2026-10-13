@@ -1,0 +1,300 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          String    @default("Viewer")
+  status        String    @default("Active")
+  version       Int       @default(1)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  audits        AuditLog[]
+  notices       NoticeState[]
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  @@index([userId])
+  @@unique([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  @@index([identifier])
+}
+
+model RateLimit {
+  id          String @id @default(cuid())
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+}
+
+model Customer {
+  id        String @id @default(cuid())
+  name      String
+  email     String @default("")
+  phone     String @default("")
+  image     String @default("")
+  notes     String @default("")
+  version   Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions  VisitorSession[]
+  bookings  Booking[]
+  @@index([createdAt])
+}
+
+model VisitorSession {
+  id         String @id @default(cuid())
+  tokenHash  String @unique
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  @@index([customerId])
+}
+
+model Driver {
+  id        String @id @default(cuid())
+  name      String
+  phone     String @default("")
+  city      String
+  vehicle   String @default("")
+  status    String @default("Available")
+  version   Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+}
+
+model Vehicle {
+  id          String @id @default(cuid())
+  name        String @unique
+  plate       String @unique
+  passengers  Int
+  luggage     Int
+  category    String
+  description String
+  image       String
+  status      String @default("Available")
+  contentIndex Int? @unique
+  version     Int @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    Booking[]
+}
+
+model Fare {
+  id        String @id @default(cuid())
+  route     String @unique
+  fare      Int?
+  hourly    Int @default(0)
+  waiting   Int @default(0)
+  caption   String @default("")
+  image     String @default("")
+  featured  Boolean @default(false)
+  contentIndex Int? @unique
+  status    String @default("Draft")
+  version   Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServiceArea {
+  id           String @id @default(cuid())
+  name         String @unique
+  destinations String @default("")
+  status       String @default("Active")
+  contentIndex Int? @unique
+  version      Int @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Booking {
+  id             String @id @default(cuid())
+  reference      String @unique
+  idempotencyKey String @unique
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  customerName   String
+  phone          String
+  pickup         String
+  destination    String
+  stops          Json
+  date           String
+  time           String
+  pickupAt       DateTime
+  returnDate     String @default("")
+  returnTime     String @default("")
+  journey        String @default("one-way")
+  passengers     Int
+  luggage        Int
+  vehicleId      String?
+  vehicle        Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  vehicleName    String @default("")
+  driverId       String?
+  driver         Driver? @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  fare           Int?
+  status         String @default("Pending")
+  notes          String @default("")
+  version        Int @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  payments       Payment[]
+  notifications  Notification[]
+  @@index([customerId, createdAt])
+  @@index([status, pickupAt])
+}
+
+model Offer {
+  id         String @id @default(cuid())
+  name       String
+  code       String @unique
+  discount   Int
+  route      String @default("")
+  validUntil String
+  terms      String @default("")
+  status     String @default("Draft")
+  version    Int @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Payment {
+  id         String @id @default(cuid())
+  bookingId  String
+  booking    Booking @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  amount     Int
+  method     String
+  status     String @default("Pending")
+  notes      String @default("")
+  providerId String? @unique
+  paidAt     DateTime?
+  version    Int @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  @@index([status, paidAt])
+}
+
+model Feedback {
+  id        String @id @default(cuid())
+  customer  String
+  type      String
+  rating    Int?
+  message   String
+  status    String @default("Pending")
+  version   Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Inquiry {
+  id        String @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  status    String @default("Pending")
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id         String @id @default(cuid())
+  recipient  String
+  bookingId  String?
+  booking    Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  channel    String
+  message    String
+  status     String @default("Draft")
+  error      String?
+  providerId String?
+  version    Int @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model NoticeState {
+  id        String @id @default(cuid())
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  noticeId  String
+  read      Boolean @default(false)
+  dismissed Boolean @default(false)
+  @@unique([userId, noticeId])
+}
+
+model SiteContent {
+  id          String @id @default("main")
+  version     Int @default(0)
+  draft       Json
+  published   Json
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+}
+
+model SiteSettings {
+  id          String @id @default("main")
+  name        String
+  phone       String
+  email       String
+  currency    String @default("SAR")
+  timezone    String @default("Asia/Riyadh")
+  description String
+  version     Int @default(1)
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String @id @default(cuid())
+  userId     String?
+  user       User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  resource   String
+  recordId   String
+  createdAt  DateTime @default(now())
+  @@index([resource, recordId, createdAt])
+}

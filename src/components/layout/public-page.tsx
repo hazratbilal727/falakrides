@@ -1,0 +1,2 @@
+import Footer from "./footer";import WhatsAppChat from "@/components/shared/whatsapp-chat";
+export default function PublicPage({title,description,children}:{title:string;description:string;children:React.ReactNode}){return <><main id="main" className="section public-page"><div className="public-page-heading"><span className="eyebrow">FALAK RIDES ? SAUDI ARABIA</span><h1>{title}</h1><p>{description}</p></div>{children}</main><Footer/><WhatsAppChat/></>}

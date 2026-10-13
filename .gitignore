@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+!.env.example
+
+# Persistent website content and local access instructions.
+/.data/
+/src/generated/prisma/

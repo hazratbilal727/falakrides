@@ -1,0 +1,7 @@
+import WhatsAppIcon from "@/components/ui/whatsapp-icon";
+import { CSSProperties } from "react";
+export default function Icon({name="arrow",size=22,style}:{name?:string;size?:number;style?:CSSProperties}) {
+if(name === "chat") return <WhatsAppIcon size={size}/>;
+const paths:Record<string,React.ReactNode>={arrow:<><path d="M4 12h15M13 5l7 7-7 7"/></>, pin:<><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></>,car:<><path d="m5 5-3 7v7h3v-3h14v3h3v-7l-3-7Z M3 12h18 M7 5h10"/><path d="M6 14h2m8 0h2"/></>,shield:<><path d="m12 2 9 4v6c0 6-9 10-9 10S3 18 3 12V6Z"/><path d="m8 12 3 3 5-6"/></>,clock:<><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></>,user:<><circle cx="12" cy="7" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></>,plane:<><path d="m22 2-7 20-4-9-9-4Z M11 13 22 2"/></>,star:<path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/>,bag:<><rect x="5" y="7" width="14" height="14" rx="2"/><path d="M9 7V3h6v4M9 11v6m6-6v6"/></>,check:<path d="m5 12 4 4L20 5"/>,chat:<><path d="M21 11a9 9 0 0 1-13 8l-6 2 2-6A9 9 0 1 1 21 11Z"/><path d="M8 8c0 5 3 7 7 7"/></>,sun:<><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/></>};
+return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={style}>{paths[name]||paths.car}</svg>;
+}

@@ -1,0 +1,23 @@
+.fleet-grid .fleet-select { width: 100%; text-align: left; font-family: inherit; cursor: pointer; }
+.fleet-detail { position: fixed; inset: 0; width: min(820px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 1px solid #e2e8de; border-radius: 20px; background: #fff; color: #172d26; overflow: auto; box-shadow: 0 24px 80px #08281e30; }
+.fleet-detail[open] { display: grid; grid-template-columns: 1fr 1fr; }
+.fleet-detail::backdrop { background: #09271f99; backdrop-filter: blur(5px); }
+body:has(.fleet-detail[open]) { overflow: hidden; }
+.fleet-detail-close { position: absolute; top: 14px; right: 14px; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #e4e9df; border-radius: 50%; background: #ffffffed; color: #344d3e; font-size: 24px; line-height: 1; }
+.fleet-detail-photo { position: relative; min-height: 360px; display: grid; place-items: center; background: #eef2e9; color: #557550; }
+.fleet-detail-photo img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.fleet-detail-photo > span { position: absolute; top: 20px; left: 20px; padding: 7px 12px; border-radius: 20px; background: #fff; font-size: 12px; color: #234c3c; }
+.fleet-detail-body { min-width: 0; padding: 45px 28px 26px; }
+.fleet-detail-body .eyebrow { font-size: 10px; letter-spacing: 1.5px; }
+.fleet-detail-body h2 { font-size: 29px; letter-spacing: -.8px; margin-bottom: 12px; }
+.fleet-detail-body p { font-size: 13px; line-height: 1.75; }
+.fleet-detail-capacity { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px 0; }
+.fleet-detail-capacity > span { display: grid; gap: 7px; padding: 14px; border: 1px solid #e3e9dd; border-radius: 10px; background: #f8faf5; }
+.fleet-detail-capacity svg { color: #557550; }
+.fleet-detail-capacity strong { font-size: 13px; font-weight: 500; }
+.fleet-detail-capacity small { font-size: 11px; color: #778271; }
+.fleet-detail-fare { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; border-top: 1px solid #e3e9dd; padding-top: 17px; }
+.fleet-detail-body .fleet-detail-note { margin: 12px 0 20px; font-size: 11px; }
+.fleet-detail-continue { width: 100%; padding: 14px 12px; font-size: 13px; gap: 10px; }
+.fleet-detail-back { display: block; margin: 16px auto 0; padding: 4px; border: 0; background: transparent; color: #64755b; font-size: 12px; }
+@media (max-width: 700px) { .fleet-detail[open] { grid-template-columns: minmax(0, 1fr); } .fleet-detail-photo { min-height: 210px; } .fleet-detail-body { padding: 24px; } }

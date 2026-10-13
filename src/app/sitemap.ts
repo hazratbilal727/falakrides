@@ -1,0 +1,2 @@
+import type {MetadataRoute} from "next";
+export default function sitemap():MetadataRoute.Sitemap {const base=process.env.SITE_URL;if(!base)return [];return ["","/book-a-ride","/services","/routes","/vehicles","/offers","/my-bookings","/about","/contact","/faq","/policies","/privacy","/terms"].map(path=>({url:`${base.replace(/\/$/,"")}${path}`,changeFrequency:"monthly" as const,priority:path?0.3:1}));}

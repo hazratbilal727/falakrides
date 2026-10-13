@@ -1,0 +1,5 @@
+import PublicPage from "@/components/layout/public-page";
+import Link from "next/link";
+import {readContent} from "@/features/content/store";
+export const metadata={title:"Offers | Falak Rides",description:"Current discounts and travel packages."};
+export default async function Page(){const {catalog} = await readContent(); return <PublicPage title="Offers" description="Current discounts and travel packages.">{catalog!.offers.length ? catalog!.offers.map(offer => <div className="offer-note" key={offer.id}><h2>{offer.title}</h2><p>{offer.route}<br/>{offer.discountPercent}% · {offer.validUntil}<br/>{offer.terms}</p><Link className="button" href="/book-a-ride">Ask about travel packages ?</Link></div>) : <div className="offer-note"><h2>No active offers published</h2><p>Contact our team for a current quote for airport transfers, Umrah, Ziyarat or group travel. Package availability and prices depend on your itinerary.</p><Link className="button" href="/contact">Ask about travel packages ?</Link></div>}</PublicPage>;}
