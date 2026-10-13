@@ -3,6 +3,7 @@ import {PrismaClient} from "../src/generated/prisma/client";
 import {databaseAdapter} from "../src/lib/db/adapter";
 
 config({path: ".env.local", quiet: true});
+config({quiet: true});
 const db = new PrismaClient({adapter: databaseAdapter()});
 async function main() {
   try {

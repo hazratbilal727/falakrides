@@ -9,6 +9,7 @@ import {initialSettings} from "../src/features/admin/data/modules";
 import type {ContentValues} from "../src/features/content/types";
 
 config({path: ".env.local", quiet: true});
+config({quiet: true});
 const db = new PrismaClient({adapter: databaseAdapter(), transactionOptions: {maxWait: 10000, timeout: 60000}});
 async function main() {try {
   const defaults = Object.fromEntries(contentFields.map(field => [field.id, field.value]));
@@ -28,10 +29,12 @@ async function main() {try {
   const current = await db.siteContent.findUniqueOrThrow({where: {id: "main"}});
   const nextDraft = updateRequestCopy({...defaults, ...current.draft as ContentValues}), nextPublished = updateRequestCopy({...defaults, ...current.published as ContentValues});
   if (JSON.stringify(nextDraft) !== JSON.stringify(current.draft) || JSON.stringify(nextPublished) !== JSON.stringify(current.published)) await db.siteContent.update({where: {id: "main", version: current.version}, data: {draft: nextDraft, published: nextPublished, version: {increment: 1}, publishedAt: new Date()}});
-  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const password = process.env.ADMIN_PASSWORD;
-  if (!email || !password || password.length < 12) throw new Error("Set ADMIN_EMAIL and an ADMIN_PASSWORD of at least 12 characters before seeding.");
-  if (!await db.user.findUnique({where: {email}})) {
+  // Bootstrap credentials must not recreate an old login after an admin changes email.
+  if (!await db.user.findFirst({where: {role: "Administrator", status: "Active"}})) {
+    const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+    const password = process.env.ADMIN_PASSWORD;
+    if (!email || !password || password.length < 12) throw new Error("Set ADMIN_EMAIL and an ADMIN_PASSWORD of at least 12 characters before initial seeding.");
+    if (await db.user.findUnique({where: {email}})) throw new Error("The seed email belongs to an existing account. Restore administrator access before seeding.");
     const userId = randomUUID();
     await db.user.create({data: {id: userId, name: "Administrator", email, emailVerified: false, role: "Administrator", accounts: {create: {id: randomUUID(), accountId: userId, providerId: "credential", password: await hashPassword(password)}}}});
     console.log("Initial administrator created. Credentials are not printed.");
