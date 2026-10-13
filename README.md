@@ -47,6 +47,19 @@ The map illustration and provided catalog photography are preserved visual conte
 
 ## Production
 
+### Vercel environment
+
+`.env.local` is deliberately excluded from GitHub and is not sent to Vercel. In Vercel, open the project **Settings → Environment Variables** and add these for **Production** (and **Preview** if used):
+
+- `DATABASE_URL`: your Neon pooled PostgreSQL connection string.
+- `DIRECT_URL`: your Neon direct connection string if migrations run there.
+- `BETTER_AUTH_SECRET`: the configured authentication secret (at least 32 characters).
+- `BETTER_AUTH_URL` and `SITE_URL`: the full deployed HTTPS origin.
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, and optionally `CLOUDINARY_UPLOAD_FOLDER`: the configured Cloudinary values.
+- `CONTENT_ADMIN_PIN` and `CONTENT_SESSION_SECRET`: if the extra content editor lock is enabled.
+
+Save the variables, then redeploy. Use values from your local environment or provider dashboard; never commit secrets. Existing admin credentials are already stored in Neon. `ADMIN_EMAIL` and `ADMIN_PASSWORD` are only needed when running the initial database seed. Prisma client generation works without a database URL, but the full application still requires its database and authentication configuration.
+
 Set `SITE_URL` and `BETTER_AUTH_URL` to the HTTPS origin, configure the Neon PostgreSQL database, configure provider accounts as needed, run migrations and seed once, then run `npm.cmd run build` and `npm.cmd start`. Initial admin credentials should be rotated before public deployment. Back up the Neon database and define the business's data retention policy.
 
 The optional existing content PIN remains an additional editor lock when `CONTENT_ADMIN_PIN` and `CONTENT_SESSION_SECRET` are configured. Admin authentication and authorization are always required regardless of PIN configuration. Set `TRUST_PROXY=true` only when a trusted reverse proxy overwrites incoming client-IP headers.
