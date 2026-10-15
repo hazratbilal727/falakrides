@@ -69,3 +69,10 @@
   .admin-app .adm-auth-heading h2 { font-size:30px; }
   .admin-app .adm-auth-card input { font-size:16px; }
 }
+
+.adm-auth-password-field { display: grid; gap: 8px; }
+.adm-auth-password-input { position: relative; }
+.adm-auth .adm-auth-password-input input { padding-right: 48px; }
+.adm-auth .adm-auth-password-toggle { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; background: transparent; color: #64765c; cursor: pointer; }
+.adm-auth .adm-auth-password-toggle:hover { background: #eef5e7; color: #476d32; }
+.adm-auth .adm-auth-password-toggle:focus-visible { outline: 2px solid #699536; outline-offset: 1px; }

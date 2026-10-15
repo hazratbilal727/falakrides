@@ -4,12 +4,14 @@ import {headers} from "next/headers";
 import {db} from "@/lib/db";
 import {HttpError} from "@/lib/security/http";
 import {canAccess} from "@/features/auth/permissions";
+import {trustedOrigins} from "@/lib/security/origins";
 export {canAccess} from "@/features/auth/permissions";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {provider: "postgresql"}),
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  trustedOrigins: async request => trustedOrigins(request),
   emailAndPassword: {enabled: true, disableSignUp: true, minPasswordLength: 12},
   user: {additionalFields: {role: {type: "string", defaultValue: "Viewer", input: false}, status: {type: "string", defaultValue: "Active", input: false}}},
   session: {expiresIn: 60 * 60 * 8, updateAge: 60 * 30, cookieCache: {enabled: false}},

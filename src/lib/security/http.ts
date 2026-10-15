@@ -1,6 +1,7 @@
 import {createHash} from "node:crypto";
 import {db} from "@/lib/db";
 import {ZodError} from "zod";
+import {trustedOrigins} from "./origins";
 
 export class HttpError extends Error {
   constructor(public status: number, message: string) {super(message);}
@@ -17,8 +18,7 @@ export function failure(error: unknown) {
   return json({error: "The request could not be completed. Please try again."}, 500);
 }
 export function sameOrigin(request: Request) {
-  const allowed = process.env.SITE_URL || process.env.BETTER_AUTH_URL || new URL(request.url).origin;
-  if (request.headers.get("origin") !== new URL(allowed).origin) throw new HttpError(403, "Request origin is not allowed.");
+  if (!trustedOrigins(request).includes(request.headers.get("origin") || "")) throw new HttpError(403, "Request origin is not allowed.");
   if (request.headers.get("sec-fetch-site") === "cross-site") throw new HttpError(403, "Cross-site requests are not allowed.");
 }
 export async function body(request: Request, limit = 1024 * 1024) {
