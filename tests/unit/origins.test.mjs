@@ -14,3 +14,12 @@ test("production trusts only configured origins",()=>{
  const allowed=origins(env,"http://localhost:3001");
  assert.deepEqual(allowed,["https://falak.example","https://www.falak.example","https://admin.falak.example"]);
 });
+
+test("Vercel production and deployment origins are trusted despite a stale localhost URL",()=>{
+ const env={NODE_ENV:"production",VERCEL:"1",BETTER_AUTH_URL:"http://localhost:3000",VERCEL_PROJECT_PRODUCTION_URL:"falakride.vercel.app",VERCEL_URL:"falakride-deployment.vercel.app"};
+ const allowed=origins(env,"https://evil.vercel.app");
+ assert.ok(allowed.includes("https://falakride.vercel.app"));
+ assert.ok(allowed.includes("https://falakride-deployment.vercel.app"));
+ assert.ok(!allowed.includes("http://localhost:3000"));
+ assert.ok(!allowed.includes("https://evil.vercel.app"));
+});

@@ -64,3 +64,14 @@
   .public-site .header > .brand strong { font-size: 18px !important; }
   .public-site .header > .brand img { width: 36px !important; height: 36px !important; }
 }
+
+@media (max-width: 900px) {
+  .public-site .header-search-mobile-toggle,
+  .public-site .header-search-mobile-toggle:hover,
+  .public-site .header-search-mobile-toggle[aria-expanded="true"] {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #32462e;
+  }
+}
