@@ -24,7 +24,7 @@ const {whatsapp} = useSiteContact();
 
   useEffect(() => {
     if (!open) return;
-    input.current?.focus();
+    if (window.matchMedia("(min-width: 601px)").matches) input.current?.focus();
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setOpen(false);
@@ -49,7 +49,7 @@ const {whatsapp} = useSiteContact();
       <header className="whatsapp-panel-header">
         <span className="whatsapp-avatar"><WhatsAppIcon size={27}/></span>
         <div><h2 id="whatsapp-title"><ContentText id="whatsapp.1" fallback="Falak Rides"/></h2><p><ContentText id="whatsapp.2" fallback="Chat with us on WhatsApp"/></p></div>
-        <button type="button" onClick={close} className="whatsapp-close" aria-label="Close WhatsApp chat"><ContentText id="ui.components-shared-whatsapp-chat.1" fallback="&times;"/></button>
+        <button type="button" onClick={close} className="whatsapp-close" aria-label="Close WhatsApp chat"><ContentText id="ui.components-shared-whatsapp-chat.1" fallback="×"/></button>
       </header>
       <div className="whatsapp-panel-body">
         <div className="whatsapp-welcome"><strong><ContentText id="whatsapp.3" fallback="Let’s plan your journey."/></strong><p><ContentText id="whatsapp.4" fallback="Share your pickup, destination and travel date. Our team can help with your ride and a quote in SAR."/></p></div>
