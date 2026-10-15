@@ -24,7 +24,6 @@ export default function ContentWorkspace({document, values, onChange, onSave, st
   const [sectionId, setSectionId] = useState(contentPages[0].sections[0].id);
   const page = contentPages.find(item => item.id === pageId)!;
   const section = page.sections.find(item => item.id === sectionId) || page.sections[0];
-  const [query, setQuery] = useState("");
   const [validationError, setValidationError] = useState("");
   const form = useRef<HTMLFormElement>(null);
   const review = useRef<HTMLDialogElement>(null);
@@ -33,7 +32,7 @@ export default function ContentWorkspace({document, values, onChange, onSave, st
   const unsaved = changedFields(values, document.draft);
   const changes = changedFields(values, document.published);
   const dirty = unsaved.length > 0;
-  const selectedFields = contentFields.filter(field => section.fields.includes(field.id) && `${field.label} ${sectionName(field.section)} ${fieldValue(field, values)}`.toLowerCase().includes(query.toLowerCase()));
+  const selectedFields = contentFields.filter(field => section.fields.includes(field.id));
 
   function update(next: ContentValues) {
     setValidationError(""); onChange(next);
@@ -43,19 +42,16 @@ export default function ContentWorkspace({document, values, onChange, onSave, st
     catch (error) {setValidationError(error instanceof Error ? error.message : "Check your content fields before saving."); return false;}
   }
   return <div className="cms-workspace">
-    {validationError && <p className="adm-cms-error" role="alert">{validationError} Check fields on other pages and sections, including those hidden by search.</p>}
+    {validationError && <p className="adm-cms-error" role="alert">{validationError} Check fields on other pages and sections, before saving.</p>}
     {actionsTarget && createPortal(
       <div className="cms-primary-actions"><button className="adm-button secondary" form="cms-editor-form" type="submit" disabled={busy || !dirty}> {state === "saving" ? "Saving..." : "Save draft"}</button><button ref={reviewTrigger} className="adm-button" disabled={busy || !changes.length} onClick={() => {if (form.current?.reportValidity() && validDraft()) review.current?.showModal();}}><Icon name="check" size={16}/>Review &amp; publish</button></div>
     , actionsTarget)}
-    <p className="cms-content-guidance">Choose a page, then a section to update its headings, descriptions and images. Manage services, bookings and vehicles in their dedicated admin areas.</p>
-    <nav className="cms-page-tabs" aria-label="Website pages">{contentPages.map(item => <button type="button" key={item.id} aria-current={pageId === item.id ? "page" : undefined} className={pageId === item.id ? "active" : ""} onClick={() => {setPageId(item.id); setSectionId(item.sections[0].id); setQuery("");}}>{item.label}</button>)}</nav>
+    <nav className="cms-page-tabs" aria-label="Website pages">{contentPages.map(item => <button type="button" key={item.id} aria-current={pageId === item.id ? "page" : undefined} className={pageId === item.id ? "active" : ""} onClick={() => {setPageId(item.id); setSectionId(item.sections[0].id);}}>{item.label}</button>)}</nav>
     <div className="cms-editor-layout">
-      <aside className="cms-section-nav"><div className="cms-section-heading">{page.label.toUpperCase()} SECTIONS</div><nav aria-label={page.label + " content sections"}>{page.sections.map(item => <button type="button" key={item.id} className={section.id === item.id ? "active" : ""} aria-current={section.id === item.id ? "page" : undefined} onClick={() => {setSectionId(item.id); setQuery("");}}>{item.label}</button>)}</nav></aside>
+      <aside className="cms-section-nav"><div className="cms-section-heading">{page.label.toUpperCase()} SECTIONS</div><nav aria-label={page.label + " content sections"}>{page.sections.map(item => <button type="button" key={item.id} className={section.id === item.id ? "active" : ""} aria-current={section.id === item.id ? "page" : undefined} onClick={() => {setSectionId(item.id);}}>{item.label}</button>)}</nav></aside>
       <div className="cms-editor-main">
-        <div className="cms-editor-heading"><h2>{page.label} / {section.label}</h2></div>
-        <div className="cms-find-bar"><div className="adm-search"><ToolIcon name="search"/><input aria-label="Search content" placeholder="Find a field or phrase..." type="search" value={query} onChange={event => setQuery(event.target.value)}/>{query && <button className="cms-clear-search" aria-label="Clear content search" onClick={() => setQuery("")}><ToolIcon name="close"/></button>}</div></div>
         <form id="cms-editor-form" ref={form} onSubmit={event => {event.preventDefault(); if (dirty && !busy && validDraft()) void onSave(false);}}><fieldset className="cms-field-list" disabled={busy}>
-          {(section.copy.length > 0 || section.collection) && <PublicWebsiteEditor values={values} onChange={update} disabled={busy} section={section} query={query}/>}
+          {(section.copy.length > 0 || section.collection) && <PublicWebsiteEditor values={values} onChange={update} disabled={busy} section={section} query=""/>}
           {selectedFields.map(field => {
             const value = fieldValue(field, values);
             const inputId = `cms-${field.id}`;
@@ -67,7 +63,7 @@ export default function ContentWorkspace({document, values, onChange, onSave, st
             </article>;
           })}
         </fieldset></form>
-        {!selectedFields.length && !section.copy.length && !section.collection && <div className="cms-no-results"><ToolIcon name="search"/><h3>No matching fields</h3><p>Try another phrase in this section.</p><button className="adm-button secondary" onClick={() => {setQuery("");}}>Clear filters</button></div>}
+        {!selectedFields.length && !section.copy.length && !section.collection && <div className="cms-no-results"><p>No editable fields in this section.</p></div>}
       </div>
     </div>
     <dialog ref={review} className="cms-review-dialog" aria-labelledby="cms-review-title" onClose={() => reviewTrigger.current?.focus()} onClick={event => {if (event.target === event.currentTarget) review.current?.close();}}>

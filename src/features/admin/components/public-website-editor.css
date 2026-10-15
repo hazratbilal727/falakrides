@@ -10,3 +10,14 @@
 .cms-page-tabs button:focus-visible{outline:2px solid #15803d;outline-offset:3px}
 .cms-content-guidance{font-size:13px;line-height:1.7;color:#607567;margin:0 0 18px}
 .cms-scoped-record{padding:0 20px 22px}.cms-field-list>.website-manager{grid-column:1/-1}.website-manager .website-records{margin-top:20px}
+
+.content-image-preview { position: relative; display: block; width: fit-content; max-width: 100%; min-width: 40px; min-height: 40px; }
+.content-image-preview > img { display: block; border-radius: 7px; background: #f5f7f2; }
+.admin-app .content-image-remove { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid #ead5d1; background: #fff; color: #b42318; box-shadow: 0 2px 8px #0001; }
+.admin-app .content-image-remove:hover { background: #fff1ef; }
+
+.content-image-field > input[type="file"][hidden] { display: none; }
+.content-image-upload-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.admin-app .content-image-upload-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 42px; padding: 10px 16px; border: 1px solid #c5d8b8; background: #f0f6e9; color: #365b29; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px #173f2a05; transition: background .15s, border-color .15s; }
+.admin-app .content-image-upload-button:hover:not(:disabled) { background: #e4efd9; border-color: #96b67d; }
+.content-image-upload-row > small { color: #74816d; font-size: 11px; line-height: 1.6; }

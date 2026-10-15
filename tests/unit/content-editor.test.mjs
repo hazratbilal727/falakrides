@@ -139,3 +139,22 @@ test("page navigation assigns each editable field and copy field once without op
  assert.equal(contentPages.find(page=>page.id==="home").sections[0].collection,"slides");
  assert.ok(contentPages.find(page=>page.id==="contact").sections.some(section=>section.fields.includes("ui.contact.1")));
 });
+
+test("removed images remain empty through validation and website parsing",()=>{
+ const image=contentFields.find(field=>field.kind==="image");
+ assert.equal(validateValues({[image.id]:""})[image.id],"");
+ const data=website();
+ data.slides[0].image="";
+ data.services[0].image="";
+ data.vehicles[0].image="";
+ data.copy.introImage="";
+ data.copy.whyImage="";
+ data.copy.calloutImage="";
+ data.copy.faqImage="";
+ const raw=JSON.stringify(data);
+ const parsed=parseWebsite(raw);
+ assert.equal(parsed.slides[0].image,"");
+ assert.equal(parsed.copy.introImage,"");
+ assert.equal(validateValues({"public.website":raw})["public.website"],raw);
+ assert.ok(websiteChanges(websiteField.value,raw).some(change=>change.includes("Introduction: Introduction image")));
+});
