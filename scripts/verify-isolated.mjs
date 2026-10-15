@@ -18,7 +18,8 @@ try {
   console.log('Created isolated verification schema; public application data is unchanged.');
   await run(['node_modules/prisma/build/index.js', 'migrate', 'deploy']);
   await run(['node_modules/tsx/dist/cli.mjs', 'prisma/seed.ts']);
-  server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '-p', '3123'], {env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
+  if (process.env.VERIFY_PRODUCTION === 'true') await run(['node_modules/next/dist/bin/next', 'build']);
+  server = spawn(process.execPath, ['node_modules/next/dist/bin/next', process.env.VERIFY_PRODUCTION === 'true' ? 'start' : 'dev', '-p', '3123'], {env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
   server.stdout.on('data', data => {logs += data;}); server.stderr.on('data', data => {logs += data;});
   const deadline = Date.now() + 90000;
   let ready = false;

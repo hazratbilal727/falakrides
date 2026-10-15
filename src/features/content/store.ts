@@ -1,3 +1,4 @@
+import {websiteField} from "./website-model";
 import {db} from "@/lib/db";
 import {databaseCatalog} from "./database-catalog";
 import type {ContentDocument, ContentValues} from "./types";
@@ -5,7 +6,7 @@ export {validateValues} from "./validation";
 
 export async function readContent(): Promise<ContentDocument> {
   const [record, catalog] = await Promise.all([db.siteContent.findUniqueOrThrow({where: {id: "main"}}), databaseCatalog()]);
-  return {version: record.version, draft: record.draft as ContentValues, published: record.published as ContentValues, updatedAt: record.updatedAt.toISOString(), publishedAt: record.publishedAt?.toISOString() || null, catalog};
+  return {version: record.version, draft: {[websiteField.id]:websiteField.value,...record.draft as ContentValues}, published: {[websiteField.id]:websiteField.value,...record.published as ContentValues}, updatedAt: record.updatedAt.toISOString(), publishedAt: record.publishedAt?.toISOString() || null, catalog};
 }
 export async function updateContent(version: number, values: ContentValues, publish: boolean, userId?: string): Promise<ContentDocument> {
   await db.$transaction(async tx => {
@@ -18,7 +19,7 @@ export async function updateContent(version: number, values: ContentValues, publ
       for (const route of routes) {const prefix = `route.${route.contentIndex}`; const [from, to] = route.route.split(" → "); await tx.fare.update({where: {id: route.id}, data: {route: `${values[`${prefix}.0`] ?? from} → ${values[`${prefix}.1`] ?? to}`, caption: values[`${prefix}.2`] ?? route.caption, image: values[`${prefix}.3`] ?? route.image, version: {increment: 1}}});}
       const areas = await tx.serviceArea.findMany({where: {contentIndex: {not: null}}});
       for (const area of areas) await tx.serviceArea.update({where: {id: area.id}, data: {name: values[`location.${area.contentIndex}`] ?? area.name, version: {increment: 1}}});
-      await tx.siteSettings.update({where: {id: "main"}, data: {phone: values["contact.phone"], email: values["contact.email"], version: {increment: 1}}});
+      await tx.siteSettings.update({where: {id: "main"}, data: {name: values["company.name"], description: values["company.description"], phone: values["contact.phone"], email: values["contact.email"], version: {increment: 1}}});
     }
     await tx.auditLog.create({data: {userId, action: publish ? "publish" : "save-draft", resource: "content", recordId: "main"}});
   });

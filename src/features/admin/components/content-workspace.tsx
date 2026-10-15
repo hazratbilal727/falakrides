@@ -1,16 +1,18 @@
 "use client";
 
+import PublicWebsiteEditor from "./public-website-editor";
+import {websiteChanges, websiteSummary} from "@/features/content/website-model";
 import {useRef, useState} from "react";
 import {createPortal} from "react-dom";
 import Icon from "@/components/ui/icon";
-import {contentFields} from "@/features/content/fields";
+import {editableContentFields as contentFields} from "@/features/content/fields";
 import {editorSections, editorSectionName, sectionContains} from "@/features/content/editor-sections";
 import {changedFields, fieldValue} from "@/features/content/editor-utils";
 import {validateValues} from "@/features/content/validation";
 import type {ContentDocument, ContentValues} from "@/features/content/types";
 
 const sectionNames: Record<string, string> = {home: "Header & hero", main: "Homepage content", "whatsapp-title": "WhatsApp identity", "whatsapp-chat": "WhatsApp chat", "whatsapp-description": "WhatsApp description", services: "Services", fleet: "Fleet", routes: "Routes", umrah: "Umrah & Ziyarat", about: "About & benefits", offers: "Offers", faq: "FAQs", contact: "Contact banner", footer: "Footer", inquiry: "Inquiry form", booking: "Booking form", whatsapp: "WhatsApp popup", privacy: "Privacy policy", terms: "Terms & conditions"};
-const sections = editorSections.map(group => group.id);
+const sections = editorSections.filter(group=>contentFields.some(field=>group.sections.includes(field.section))).map(group => group.id);
 const sectionName = (section: string) => sectionNames[section] || section;
 
 export default function ContentWorkspace({document, values, onChange, onSave, onLock, state, accessExpiresAt, actionsTarget}: {
@@ -49,13 +51,14 @@ export default function ContentWorkspace({document, values, onChange, onSave, on
         <div className="cms-find-bar"><div className="adm-search"><ToolIcon name="search"/><input aria-label="Search content" placeholder="Find a field or phrase..." type="search" value={query} onChange={event => setQuery(event.target.value)}/>{query && <button className="cms-clear-search" aria-label="Clear content search" onClick={() => setQuery("")}><ToolIcon name="close"/></button>}</div></div>
         <form id="cms-editor-form" ref={form} onSubmit={event => {event.preventDefault(); if (dirty && !busy && validDraft()) void onSave(false);}}><fieldset className="cms-field-list" disabled={busy}>
           {selectedFields.map(field => {
+            if (field.kind === "website") return <PublicWebsiteEditor key={field.id} values={values} published={document.published} onChange={update} disabled={busy}/>;
             const value = fieldValue(field, values);
             const inputId = `cms-${field.id}`;
             const longText = !field.kind && field.value.length > 100;
             return <article className="cms-field-card" key={field.id}>
               <small className="cms-field-section">{sectionName(field.section)}</small>
               <label htmlFor={inputId}>{field.label}</label>
-              {longText ? <textarea id={inputId} rows={4} maxLength={6000} value={value} onChange={event => update({...values, [field.id]: event.target.value})}/> : <input id={inputId} type={field.kind === "number" ? "number" : field.kind === "email" ? "email" : field.kind === "phone" ? "tel" : "text"} required={!!field.kind} min={field.kind === "number" ? 0 : undefined} max={field.kind === "number" ? 30 : undefined} step={field.kind === "number" ? 1 : undefined} pattern={field.kind === "image" ? "photo-[0-9]+-[a-f0-9]+" : field.kind === "phone" ? "[+]?[0-9 ()\\-]{8,25}" : undefined} maxLength={field.kind === "image" ? 100 : 6000} value={value} onChange={event => update({...values, [field.id]: event.target.value})}/>}
+              {longText ? <textarea id={inputId} rows={4} maxLength={6000} value={value} onChange={event => update({...values, [field.id]: event.target.value})}/> : <input id={inputId} type={field.kind === "number" ? "number" : field.kind === "email" ? "email" : field.kind === "phone" ? "tel" : "text"} required={!!field.kind} min={field.kind === "number" ? 0 : undefined} max={field.kind === "number" ? 30 : undefined} step={field.kind === "number" ? 1 : undefined} pattern={field.kind === "phone" ? "[+]?[0-9 ()\\-]{8,25}" : undefined} maxLength={field.kind === "image" ? 200 : 6000} value={value} onChange={event => update({...values, [field.id]: event.target.value})}/>}
             </article>;
           })}
         </fieldset></form>
@@ -64,7 +67,7 @@ export default function ContentWorkspace({document, values, onChange, onSave, on
     </div>
     <dialog ref={review} className="cms-review-dialog" aria-labelledby="cms-review-title" onClose={() => reviewTrigger.current?.focus()} onClick={event => {if (event.target === event.currentTarget) review.current?.close();}}>
       <div className="cms-review-head"><div><span className="adm-overline">READY TO GO LIVE</span><h2 id="cms-review-title">Review your changes</h2><p>{changes.length} {changes.length === 1 ? "field" : "fields"} will update on your website.</p></div><button className="adm-icon-button" aria-label="Close publish review" onClick={() => review.current?.close()} autoFocus><ToolIcon name="close"/></button></div>
-      <div className="cms-review-list">{changes.map(field => <article key={field.id}><small>{sectionName(field.section)}</small><h3>{field.label}</h3><div className="cms-diff"><div><span>Live now</span><p>{fieldValue(field, document.published) || "(Empty)"}</p></div><div><span>After publishing</span><p>{fieldValue(field, values) || "(Empty)"}</p></div></div></article>)}</div>
+      <div className="cms-review-list">{changes.map(field => <article key={field.id}><small>{sectionName(field.section)}</small><h3>{field.label}</h3>{field.kind === "website" && <ul className="website-change-list">{websiteChanges(fieldValue(field, document.published),fieldValue(field, values)).map((change,index)=><li key={index}>{change}</li>)}</ul>}<div className="cms-diff"><div><span>Live now</span><p>{(field.kind === "website" ? websiteSummary(fieldValue(field, document.published)) : fieldValue(field, document.published)) || "(Empty)"}</p></div><div><span>After publishing</span><p>{(field.kind === "website" ? websiteSummary(fieldValue(field, values)) : fieldValue(field, values)) || "(Empty)"}</p></div></div></article>)}</div>
       <div className="cms-review-actions"><p>Publishing also saves your current draft.</p><button className="adm-button secondary" disabled={busy} onClick={() => review.current?.close()}>Keep editing</button><button className="adm-button" disabled={busy || !changes.length} onClick={() => {review.current?.close(); void onSave(true);}}><Icon name="check" size={16}/>Publish changes</button></div>
     </dialog>
   </div>;

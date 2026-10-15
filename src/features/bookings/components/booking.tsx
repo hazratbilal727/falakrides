@@ -7,18 +7,18 @@ import {useSiteCatalog} from "@/features/content/public-content";
 
 import {useUnsavedChanges} from "@/components/forms/unsaved-changes";
 import Icon from "@/components/ui/icon";
-export default function Booking(){
+export default function Booking({preference}: {preference?: {vehicle?: string; package?: string}} = {}){
 const {whatsapp} = useSiteContact();
 
 const {vehicles, locations, fares} = useSiteCatalog();
 const gmc = useContentValue("booking.21", "GMC vehicle"), civic = useContentValue("booking.22", "Honda Civic");
 
 const [trip,setTrip]=useState("One way"),[step,setStep]=useState(0),[error,setError]=useState(""),[reference,setReference]=useState("");
-const [details,setDetails]=useState<Record<string,string>>({pickup:"",destination:"",date:"",time:"",passengers:"1",luggage:"1",vehicle:vehicles[0]?.name || "",name:"",phone:"",flight:"",notes:"",returnDate:"",stops:""});
+const [details,setDetails]=useState<Record<string,string>>({pickup:"",destination:"",date:"",time:"",passengers:"1",luggage:"1",vehicle:vehicles.find(vehicle => vehicle.name.toLowerCase() === preference?.vehicle?.toLowerCase())?.name || vehicles[0]?.name || "",name:"",phone:"",flight:"",notes:[preference?.vehicle ? `Requested vehicle: ${preference.vehicle}` : "", preference?.package ? `Requested package: ${preference.package}` : ""].filter(Boolean).join("; "),returnDate:"",stops:""});
 const estimate = trip === "Round trip" || details.stops || !vehicles.some(vehicle => vehicle.name === details.vehicle) ? null : fares?.find(fare => fare.route.toLowerCase() === `${details.pickup} → ${details.destination}`.toLowerCase())?.fare ?? null;
 const [submitting, setSubmitting] = useState(false);
 const idempotencyKey = useRef("");
-const [dirty, setDirty] = useState(false);
+const [dirty, setDirty] = useState(Boolean(preference?.vehicle || preference?.package));
 useUnsavedChanges(dirty, () => {setDirty(false); setTrip("One way"); setStep(0); setDetails({pickup:"",destination:"",date:"",time:"",passengers:"1",luggage:"1",vehicle:vehicles[0]?.name || "",name:"",phone:"",flight:"",notes:"",returnDate:"",stops:""});});
 useEffect(() => {
   function selectVehicle(event: Event) {

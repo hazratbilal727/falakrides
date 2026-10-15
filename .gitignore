@@ -45,3 +45,7 @@ next-env.d.ts
 # Persistent website content and local access instructions.
 /.data/
 /src/generated/prisma/
+
+# Local reference inspection and browser screenshots.
+/tmp/reference/
+/.next-design-check/

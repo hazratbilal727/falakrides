@@ -1,11 +1,6 @@
-import PublicPage from "@/components/layout/public-page";import {readContent} from "@/features/content/store";export const metadata={title:"FAQ | Falak Rides"};export default async function Page(){const document=await readContent();const text=(id:string,fallback:string)=>document.published[id]??fallback;const faqs=[
- [text("home.17", "How do I book a private ride?"),text("home.18", "Choose your route, date and vehicle preference in the booking form. Review the details, then send your request on WhatsApp. Your reservation is confirmed only when Falak Rides confirms it directly.")],
- [text("home.19", "Where can I be picked up and dropped off?"),text("home.20", "Request transportation in Makkah, Madinah and Jeddah, including airports and hotels. Share the exact pickup and destination with the team to confirm route coverage.")],
- [text("home.21", "Can I arrange an airport transfer?"),text("home.22", "Yes, you can request an airport transfer. Add your flight number to your request and agree on the meeting point and any waiting fees with the team.")],
- [text("home.23", "Can I request Umrah and Ziyarat transportation?"),text("home.24", "Select your destinations and mention any planned Ziyarat stops in special requirements. The team will confirm the itinerary, timing and quote.")],
- [text("home.25", "Which vehicle will fit my passengers and luggage?"),text("home.26", "The fleet shown is illustrative. Include your passenger count, luggage pieces and accessibility or child-seat needs so the team can confirm a suitable vehicle.")],
- [text("home.27", "Can I schedule a ride in advance?"),text("home.28", "Choose a future date and time in the form. All scheduling requests remain subject to the team's availability confirmation.")],
- [text("home.29", "What is the cancellation or rescheduling policy?"),text("home.30", "Ask for the cancellation and rescheduling terms before accepting your quote. Contact Falak Rides on WhatsApp if your plans change.")],
- [text("home.31", "How much will my ride cost, and how can I pay?"),text("home.32", "All quotes are in Saudi Riyals (SAR). Published route fares and payment methods have not yet been supplied. Request a full quote, including waiting, parking, tolls and any other applicable fees, and confirm payment arrangements before booking.")]
-];
-return <PublicPage title="FAQ" description="Answers about pricing, booking, waiting times, cancellations and travel."><div className="faqs faq-page-list">{faqs.map(([q,a])=><details key={q}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}<details><summary>How long will my driver wait?<span>+</span></summary><p>Agree on included waiting time, flight-delay arrangements and additional fees with our team before confirming. Waiting allowances have not been published.</p></details></div></PublicPage>}
+﻿import {readContent} from "@/features/content/store";
+import {websiteFromValues} from "@/features/content/website-model";
+import PublicPage from "@/components/layout/public-page";
+import {FaqSection} from "@/components/public/sections";
+export const metadata = {title: "Frequently Asked Questions | Falak Rides", description: "Answers about booking private taxis, airport transfers, vehicle choices, fares, Ziyarat and cancellations."};
+export default async function Faq() {const {published}=await readContent();const {copy:c}=websiteFromValues(published);return <PublicPage title={c.faqPageTitle} description={metadata.description}><FaqSection full/></PublicPage>;}

@@ -139,3 +139,34 @@ test('operational modules persist, active offers publish, and payments use integ
   assert.ok(catalog.offers.some(offer => offer.title === `Offer ${suffix}`));
   assert.ok(catalog.reviews.some(review => review.name === `Review ${suffix}`));
 });
+
+test('current website drafts, dynamic service/package pages and visibility publish from admin', async () => {
+  if (process.env.CONTENT_ADMIN_PIN) assert.equal((await admin('/api/content/access','POST',{action:'login',pin:process.env.CONTENT_ADMIN_PIN})).status,200);
+  const original=(await admin('/api/content?admin=1')).result;
+  const key='public.website';
+  assert.ok(original.published[key]);
+  const website=JSON.parse(original.draft[key]);
+  const service={...website.services[0],id:`sync-service-${suffix}`,slug:`sync-service-${suffix}`,title:`Synced service ${suffix}`,heading:`Synced service heading ${suffix}`};
+  const packageVehicle={...website.vehicles[0],id:`sync-vehicle-${suffix}`,slug:`sync-vehicle-${suffix}`,name:`Synced vehicle ${suffix}`};
+  website.services.push(service);website.vehicles.push(packageVehicle);website.slides[0].title=`Synced hero ${suffix}`;website.faqs[0].visible=false;
+  cleanup.push(async()=>{const current=(await admin('/api/content?admin=1')).result;const published=await admin('/api/content','POST',{action:'publish',version:current.version,values:{...current.published,[key]:original.published[key]}});assert.equal(published.status,200);assert.equal((await admin('/api/content','POST',{action:'save',version:published.result.version,values:{...published.result.draft,[key]:original.draft[key]}})).status,200);});
+  const saved=await admin('/api/content','POST',{action:'save',version:original.version,values:{...original.draft,[key]:JSON.stringify(website)}});
+  assert.equal(saved.status,200,JSON.stringify(saved.result));
+  assert.equal((await guest('/api/content')).result.values[key],original.published[key]);
+  const published=await admin('/api/content','POST',{action:'publish',version:saved.result.version,values:saved.result.draft});
+  assert.equal(published.status,200,JSON.stringify(published.result));
+  const publicWebsite=JSON.parse((await guest('/api/content')).result.values[key]);
+  assert.equal(publicWebsite.slides[0].title,website.slides[0].title);
+  assert.equal(publicWebsite.faqs[0].visible,false);
+  const serviceHtml=await(await fetch(`${origin}/services/${service.slug}`)).text();
+  assert.match(serviceHtml,new RegExp(`<h1[^>]*>${service.title}</h1>`));
+  const packageHtml=await(await fetch(`${origin}/packages/${packageVehicle.slug}`)).text();
+  assert.match(packageHtml,new RegExp(`<h1[^>]*>${packageVehicle.name} Packages</h1>`));
+  website.services[website.services.length-1].visible=false;
+  const hidden=await admin('/api/content','POST',{action:'publish',version:published.result.version,values:{...published.result.draft,[key]:JSON.stringify(website)}});
+  assert.equal(hidden.status,200,JSON.stringify(hidden.result));
+  const hiddenHtml=await(await fetch(`${origin}/services/${service.slug}`)).text();
+  assert.ok(hiddenHtml.includes('Page not found.'));
+  const invalid=JSON.parse(JSON.stringify(website));invalid.slides[0].image='javascript:alert(1)';
+  assert.equal((await admin('/api/content','POST',{action:'publish',version:hidden.result.version,values:{...hidden.result.draft,[key]:JSON.stringify(invalid)}})).status,400);
+});

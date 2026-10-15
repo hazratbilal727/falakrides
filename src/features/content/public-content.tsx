@@ -1,5 +1,6 @@
 "use client";
-import {createContext, useContext, useEffect, useRef, useState} from "react";
+import {websiteFromValues} from "./website-model";
+import {createContext, useContext, useEffect, useRef, useState, useMemo} from "react";
 import {useRouter} from "next/navigation";
 import type {ContentValues, PublicCatalog} from "./types";
 const ContentContext = createContext<ContentValues>({});
@@ -32,6 +33,8 @@ export function PublicContent({initial, catalog: initialCatalog, revision, child
 export function ContentText({id, fallback}: {id: string; fallback: string}) {return useContext(ContentContext)[id] ?? fallback;}
 export function useContentValue(id: string, fallback: string) {return useContext(ContentContext)[id] ?? fallback;}
 export function useSiteCatalog() {return useContext(CatalogContext);}
+export function useWebsite() {const values=useContext(ContentContext);return useMemo(()=>websiteFromValues(values),[values]);}
+export function useSiteCompany() {const values=useContext(ContentContext);return {name:values["company.name"] || "Falak Rides",description:values["company.description"] || "Private transportation across Makkah, Madinah and Jeddah."};}
 export function useSiteContact() {
   const values = useContext(ContentContext);
   const phone = values["contact.phone"] ?? "+966 56 769 1863";

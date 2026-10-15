@@ -11,3 +11,8 @@ Team invitations return a one-time activation URL in the existing toast. Share i
 Inquiries appear in Reviews & complaints as Inquiry entries; they have no rating. Notification read/dismiss states persist per administrator. Delivery requires configured external providers; drafts and failures remain visible instead of simulating a successful send.
 
 Cash/bank payment entries are staff bookkeeping. Card payments and refunds require a verified provider transaction. Exported rows exclude internal version metadata. Revenue charts use recorded paid timestamps; date filters use Saudi calendar dates rather than fixed demonstration dates.
+## Current public website management
+
+Website content now includes the public design's structured data and actions. Start with **Current public website** to manage slides, service pages, vehicle-package pages, itinerary routes, FAQs, homepage order/visibility, navigation labels, and page copy/images. Changes use the existing authenticated, PIN-protected, versioned draft/publish API and audit trail.
+
+The fleet editor includes public category, description, and image fields. The fare editor includes public caption and image fields. Updates, visibility/status changes, offers, approved reviews, service areas, and company settings are reflected by the public site's existing refresh cycle.

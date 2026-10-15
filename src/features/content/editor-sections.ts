@@ -1,6 +1,7 @@
 import {contentFields} from "./fields";
 
 const groups = [
+  {id: "current-website", label: "Current public website", sections: ["Current website"]},
   {id: "homepage", label: "Homepage & navigation", sections: ["home", "main", "Navigation", "SEO"]},
   {id: "transportation", label: "Services & Umrah", sections: ["services", "umrah"]},
   {id: "vehicles", label: "Fleet & vehicles", sections: ["fleet", "Vehicles"]},

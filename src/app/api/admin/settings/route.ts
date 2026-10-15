@@ -12,7 +12,7 @@ export async function PUT(request: Request) {
       const changed = await tx.siteSettings.updateMany({where: {id: "main", version}, data: {...values, version: {increment: 1}}});
       if (!changed.count) throw new HttpError(409, "Company settings changed. Refresh before saving.");
       const content = await tx.siteContent.findUniqueOrThrow({where: {id: "main"}});
-      const overlay = {"contact.phone": values.phone, "contact.email": values.email};
+      const overlay = {"contact.phone": values.phone, "contact.email": values.email, "company.name":values.name, "company.description":values.description};
       await tx.siteContent.update({where: {id: "main", version: content.version}, data: {version: {increment: 1}, draft: {...content.draft as ContentValues, ...overlay}, published: {...content.published as ContentValues, ...overlay}, publishedAt: new Date()}});
       await tx.auditLog.create({data: {userId: user.id, action: "update", resource: "settings", recordId: "main"}});
       return tx.siteSettings.findUniqueOrThrow({where: {id: "main"}});

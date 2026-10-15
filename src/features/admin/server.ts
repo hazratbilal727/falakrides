@@ -1,3 +1,4 @@
+import {isSafePublicImage} from "@/features/content/website-model";
 import {randomBytes} from "node:crypto";
 import {z} from "zod";
 import {db} from "@/lib/db";
@@ -71,7 +72,8 @@ function validate(module: string, input: unknown) {
     if (field.type === "number") schema = schema.refine(value => !value || /^\d+(\.\d{1,2})?$/.test(value) && Number(value) <= 10000000, `${field.label} must be a valid non-negative number.`);
     if (field.type === "select" && !["driver", "vehicle"].includes(field.key)) schema = schema.refine(value => !value && field.key === "rating" || !!field.options?.includes(value), `Choose a valid ${field.label.toLowerCase()}.`);
     if (field.type === "date") schema = schema.refine(value => !value && !field.required || /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value)), "Enter a valid date.");
-    shape[field.key] = schema;
+    if (field.key === "image") schema = schema.refine(value => !value || isSafePublicImage(value), "Use a local /images/ path or Unsplash photo ID.");
+    shape[field.key] = ["category", "description", "image", "caption"].includes(field.key) ? schema.optional() : schema;
   }
   shape.id = z.string().optional(); shape._version = z.string().optional(); shape._createdAt = z.string().optional();
   return z.object(shape).strip().parse(input) as Record<string, string>;
@@ -79,6 +81,7 @@ function validate(module: string, input: unknown) {
 const money = (value: string) => {const [whole, fraction = ""] = value.split("."); return Number(whole || 0) * 100 + Number(fraction.padEnd(2, "0"));};
 async function mutationData(tx: Prisma.TransactionClient, module: string, row: Record<string, string>, existing: Row | null) {
   const data: Row = Object.fromEntries(modules[module].fields.map(field => [field.key, row[field.key] ?? ""]));
+  for (const key of ["category", "description", "image", "caption"]) if (existing && modules[module].fields.some(field=>field.key===key) && row[key] === undefined) data[key] = existing[key] ?? "";
   if (module === "bookings") {
     const [pickup, destination, extra] = row.route.split(/\s*(?:→|->)\s*/);
     if (!pickup || !destination || extra) throw new HttpError(400, "Enter the route as Pickup → Destination.");
@@ -97,10 +100,10 @@ async function mutationData(tx: Prisma.TransactionClient, module: string, row: R
   if (module === "customers") delete data.trips;
   if (module === "vehicles") {
     for (const key of ["passengers", "luggage"]) {data[key] = Number(row[key]); if (!Number.isInteger(data[key]) || Number(data[key]) < (key === "passengers" ? 1 : 0) || Number(data[key]) > 30) throw new HttpError(400, "Vehicle capacities must be whole numbers from 0 to 30.");}
-    if (!existing) Object.assign(data, {category: "Economy", description: "", image: ""});
+    data.category = row.category || String(existing?.category || "Economy");
   }
   if (module === "fares") for (const key of ["fare", "hourly", "waiting"]) data[key] = row[key] ? money(row[key]) : key === "fare" ? null : 0;
-  if (module === "fares" && !existing) {data.featured = true; data.image = "/images/header-background.jpg";}
+  if (module === "fares" && !existing) {data.featured = true; data.image = row.image || "/images/header-background.jpg";}
   if (module === "offers") {data.discount = Number(row.discount); if (!Number.isInteger(data.discount) || Number(data.discount) > 100) throw new HttpError(400, "Discount must be a whole number from 0 to 100.");}
   if (module === "feedback") {data.rating = row.type === "Inquiry" ? null : Number(row.rating); if (row.type !== "Inquiry" && !row.rating) throw new HttpError(400, "Choose a rating.");}
   if (module === "payments" || module === "notifications") {

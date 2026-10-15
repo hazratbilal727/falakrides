@@ -79,13 +79,22 @@ export default function BookingPopup() {
       if (url.origin !== window.location.origin || url.pathname.replace(/\/$/, "") !== "/book-a-ride") return;
       event.preventDefault();
       trigger.current = target;
+      const preferredVehicle = url.searchParams.get("vehicle")?.slice(0, 100);
+      const preferredPackage = url.searchParams.get("package")?.slice(0, 100);
+      if (status === "draft" && (preferredVehicle || preferredPackage)) {
+        setRide(current => {
+          const preference = [preferredVehicle ? `Requested vehicle: ${preferredVehicle}` : "", preferredPackage ? `Requested package: ${preferredPackage}` : ""].filter(Boolean).join("; ");
+          const match = vehicles.find(item => item.name.toLowerCase() === preferredVehicle?.toLowerCase());
+          return {...current, ...(match ? {vehicle: match.name} : {}), notes: current.notes.includes(preference) ? current.notes : [current.notes, preference].filter(Boolean).join("\n").slice(0, 600)};
+        });
+      }
       dialog.current?.showModal();
       setIsOpen(true);
       requestAnimationFrame(() => {heading.current?.focus({preventScroll: true}); dialog.current?.querySelector(".ride-form-content")?.scrollTo(0, 0);});
     }
     document.addEventListener("click", open, true);
     return () => document.removeEventListener("click", open, true);
-  }, []);
+  }, [status, vehicles]);
   useEffect(() => {
     const element = dialog.current;
     if (!element) return;

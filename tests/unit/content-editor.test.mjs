@@ -24,7 +24,7 @@ const {validateValues} = load("validation.ts");
 const {editorSections, sectionContains} = load("editor-sections.ts");
 
 test("combined navigation assigns every original section to exactly one group", () => {
-  assert.equal(editorSections.length, 9);
+  assert.equal(editorSections.length, 10);
   for (const field of contentFields) {
     assert.equal(editorSections.filter(group => sectionContains(group.id, field.section)).length, 1, field.section);
     assert.equal(sectionContains("all", field.section), true);
@@ -61,4 +61,38 @@ test("draft validation rejects invalid fields even outside the visible section",
   const image = contentFields.find(field => field.kind === "image");
   assert.throws(() => validateValues({[image.id]: "javascript:alert(1)"}), /Unsplash/);
   assert.equal(validateValues({"contact.email": "hello@example.com"})["contact.email"], "hello@example.com");
+});
+
+const {defaultWebsite,websiteField,parseWebsite,websiteFromValues,websiteChanges,isSafePublicImage}=load("website-model.ts");
+const website=()=>JSON.parse(JSON.stringify(defaultWebsite));
+test("current public data is registered with the existing draft and publish editor",()=>{
+  assert.equal(contentFields.find(field=>field.id==="public.website").kind,"website");
+  assert.equal(parseWebsite(websiteField.value).services.length,3);
+  assert.equal(parseWebsite(websiteField.value).vehicles.length,6);
+  assert.equal(websiteFromValues({}).faqs.length,6);
+  assert.equal(validateValues({"public.website":websiteField.value})["public.website"],websiteField.value);
+});
+test("website validation rejects unsafe image references, duplicate slugs, unknown sections and malformed records",()=>{
+  for(const image of ["javascript:alert(1)","/images/../private.png","https://untrusted.example/car.jpg"]){const d=website();d.slides[0].image=image;assert.throws(()=>parseWebsite(JSON.stringify(d)),/image/i);}
+  const d=website();d.services.push({...d.services[0],id:"other"});assert.throws(()=>parseWebsite(JSON.stringify(d)),/unique/i);
+  const bad=website();bad.homeSections[0].key="unknown";assert.throws(()=>parseWebsite(JSON.stringify(bad)),/section/i);
+  const nested=website();nested.services[0].sections[0].items=[{}];assert.throws(()=>parseWebsite(JSON.stringify(nested)),/destinations/i);
+  const nav=website();nav.copy.navHome="";assert.throws(()=>parseWebsite(JSON.stringify(nav)),/Home link/i);
+  assert.equal(isSafePublicImage("/images/reference/camry.jpg"),true);
+  assert.equal(isSafePublicImage("photo-1565552645632-d725f8bfc19a"),true);
+});
+test("publish review identifies additions, removals, edits, visibility changes and order changes",()=>{
+  const d=website();d.slides[0].title="New public heading";d.faqs[0].visible=false;d.vehicles.pop();d.services.push({...d.services[0],id:"new-service",slug:"new-service"});d.itineraries.reverse();d.copy.footerTitle="Updated footer";
+  const changes=websiteChanges(websiteField.value,JSON.stringify(d));
+  assert.ok(changes.some(value=>value.includes("Updated slides")));
+  assert.ok(changes.some(value=>value.includes("Updated faqs")));
+  assert.ok(changes.some(value=>value.includes("Removed vehicles")));
+  assert.ok(changes.some(value=>value.includes("Added services")));
+  assert.ok(changes.some(value=>value.includes("Reordered itineraries")));
+  assert.ok(changes.some(value=>value.includes("Footer: Heading")));
+});
+test("draft editing retains temporarily incomplete fields until save validation",()=>{
+  const d=website();d.slides[0].title="";const values={"public.website":JSON.stringify(d)};
+  assert.equal(websiteFromValues(values,true).slides[0].title,"");
+  assert.throws(()=>validateValues(values),/slide title/i);
 });

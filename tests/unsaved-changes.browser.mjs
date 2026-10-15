@@ -40,7 +40,6 @@ try {
   const base = process.env.TEST_BASE_URL || 'http://localhost:3000';
   await command('Page.navigate', {url: base});
   await wait(`document.querySelector('.public-account-trigger')`);
-  await wait(`Object.keys(document.querySelector('.public-account-trigger') || {}).some(key => key.startsWith('__reactProps'))`);
   await wait(`document.querySelector('.public-account-trigger') && !document.querySelector('.public-account-trigger').disabled`);
   await click('.public-account-trigger');
   await wait(`document.querySelector('.public-account-options button')`);
@@ -66,16 +65,17 @@ try {
   assert.equal(await evaluate(`document.querySelector('.unsaved-dialog').open`), false);
   console.log('PASS: profile Keep editing, Discard, and successful save');
 
-  await input('#inquiry-name', 'Unsent inquiry');
+  await input('.taxi-footer-inquiry input[name="name"]', 'Unsent inquiry');
   await evaluate(`document.querySelector('a[href="/services"]').click()`);
   await wait(`document.querySelector('.unsaved-dialog').open`);
   await click('.unsaved-keep');
   await wait(`!document.querySelector('.unsaved-dialog').open`);
-  assert.equal(await evaluate(`document.querySelector('#inquiry-name').value`), 'Unsent inquiry');
+  assert.equal(await evaluate(`document.querySelector('.taxi-footer-inquiry input[name="name"]').value`), 'Unsent inquiry');
   await evaluate(`document.querySelector('a[href="/services"]').click()`);
   await wait(`document.querySelector('.unsaved-dialog').open`);
   await click('.unsaved-discard');
   await wait(`location.pathname === '/services'`);
+  await wait(`document.querySelector('.public-account-trigger') && !document.querySelector('.public-account-trigger').disabled`);
   await click('.public-account-trigger');
   await click('.public-account-options button');
   await input('.public-profile-dialog input[name="name"]', 'History edit');
@@ -160,6 +160,42 @@ try {
   await click('.unsaved-discard');
   await wait(`!document.querySelector('.adm-dialog')`);
   console.log('PASS: admin saves clear warnings; record Escape and X protect edits');
+  await adminSection('Website content');
+  await wait(`document.querySelector('.website-manager') || document.querySelector('.adm-cms-pin input')`);
+  if (await evaluate(`Boolean(document.querySelector('.adm-cms-pin input'))`)) {
+    await input('.adm-cms-pin input',process.env.CONTENT_ADMIN_PIN);
+    await wait(`document.querySelector('.website-manager')`);
+  }
+  const originalWebsite = await evaluate(`fetch('/api/content?admin=1').then(r=>r.json())`);
+  const previousRestore = restore;
+  restore = async () => {
+    await evaluate(`(async()=>{const current=await(await fetch('/api/content?admin=1')).json();const live={...current.published,'public.website':${JSON.stringify(originalWebsite.published['public.website'])}};const result=await(await fetch('/api/content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'publish',version:current.version,values:live})})).json();await fetch('/api/content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',version:result.version,values:{...result.draft,'public.website':${JSON.stringify(originalWebsite.draft['public.website'])}}})});})()`);
+    await previousRestore();
+  };
+  const originalCount = await evaluate(`document.querySelectorAll('.website-record').length`);
+  await evaluate(`[...document.querySelector('.website-record-actions').querySelectorAll('button')].find(b=>b.textContent==='Duplicate').click()`);
+  await wait(`document.querySelectorAll('.website-record').length === ${originalCount+1}`);
+  await evaluate(`[...document.querySelectorAll('.website-record')].at(-1).querySelector('.website-remove').click()`);
+  await wait(`document.querySelector('.website-confirm').open`);
+  await click('.website-confirm .adm-button:not(.secondary)');
+  await wait(`document.querySelectorAll('.website-record').length === ${originalCount}`);
+  await click('.website-record-details summary');
+  const publishedTitle = JSON.parse(originalWebsite.published['public.website']).slides[0].title;
+  const nextTitle = 'Browser synced hero ' + suffix;
+  await input('[data-website-field="title"]',nextTitle);
+  await click('.cms-primary-actions .secondary');
+  await wait(`document.querySelector('.adm-cms-success')?.textContent.includes('Draft saved')`);
+  assert.equal(await evaluate(`fetch('/api/content').then(r=>r.json()).then(d=>JSON.parse(d.values['public.website']).slides[0].title)`),publishedTitle);
+  await evaluate(`(()=>{const frame=document.createElement('iframe');frame.id='sync-public-preview';frame.src='/';frame.style='position:fixed;left:-2000px;width:1366px;height:900px';document.body.appendChild(frame);})()`);
+  await wait(`document.querySelector('#sync-public-preview').contentDocument?.querySelector('.taxi-slide h1')`);
+  await click('.cms-primary-actions .adm-button:not(.secondary)');
+  await wait(`document.querySelector('.cms-review-dialog:not(.website-confirm)').open`);
+  await click('.cms-review-actions .adm-button:not(.secondary)');
+  await wait(`document.querySelector('.adm-cms-success')?.textContent.includes('Published')`);
+  await wait(`document.querySelector('#sync-public-preview').contentDocument?.querySelector('.taxi-slide h1')?.textContent === ${JSON.stringify(nextTitle)}`);
+  await evaluate(`document.querySelector('#sync-public-preview').remove()`);
+  console.log('PASS: current website duplicate/remove, private drafts, publishing and live public refresh');
+
 } finally {
   if (restore) await restore().catch(error => console.error('Browser cleanup failed:', error.message));
   socket?.close();
