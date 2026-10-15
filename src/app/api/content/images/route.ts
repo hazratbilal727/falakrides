@@ -1,7 +1,5 @@
-import {cookies} from "next/headers";
 import {requireAdmin} from "@/lib/auth";
 import {getCloudinary, cloudinaryUploadFolder} from "@/lib/cloudinary";
-import {configured, CONTENT_COOKIE, validSession} from "@/features/content/security";
 import {failure, HttpError, json, rateLimit, sameOrigin} from "@/lib/security/http";
 import {db} from "@/lib/db";
 import {imageMimeType, MAX_CONTENT_IMAGE_BYTES} from "@/features/content/image-upload";
@@ -11,7 +9,6 @@ export async function POST(request: Request) {
   try {
     const user = await requireAdmin("content", true);
     sameOrigin(request);
-    if (configured() && !validSession((await cookies()).get(CONTENT_COOKIE)?.value)) throw new HttpError(401,"Unlock Website content before uploading images.");
     await rateLimit(request,"content-image-uploads",20);
     if (Number(request.headers.get("content-length")) > MAX_CONTENT_IMAGE_BYTES) throw new HttpError(413,"Choose an image smaller than 8 MB.");
     const reader = request.body?.getReader();

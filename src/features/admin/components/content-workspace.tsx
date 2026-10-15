@@ -15,10 +15,10 @@ import type {ContentDocument, ContentValues} from "@/features/content/types";
 const sectionNames: Record<string, string> = {home: "Header & hero", main: "Homepage content", "whatsapp-title": "WhatsApp identity", "whatsapp-chat": "WhatsApp chat", "whatsapp-description": "WhatsApp description", services: "Services", fleet: "Fleet", routes: "Routes", umrah: "Umrah & Ziyarat", about: "About & benefits", offers: "Offers", faq: "FAQs", contact: "Contact banner", footer: "Footer", inquiry: "Inquiry form", booking: "Booking form", whatsapp: "WhatsApp popup", privacy: "Privacy policy", terms: "Terms & conditions"};
 const sectionName = (section: string) => sectionNames[section] || section;
 
-export default function ContentWorkspace({document, values, onChange, onSave, onLock, state, accessExpiresAt, actionsTarget}: {
+export default function ContentWorkspace({document, values, onChange, onSave, state, actionsTarget}: {
   document: ContentDocument; values: ContentValues; onChange: (values: ContentValues) => void;
-  onSave: (publish: boolean) => Promise<void>; onLock: () => Promise<void>;
-  state: string; accessExpiresAt: number; actionsTarget: HTMLDivElement | null;
+  onSave: (publish: boolean) => Promise<void>;
+  state: string; actionsTarget: HTMLDivElement | null;
 }) {
   const [pageId, setPageId] = useState(contentPages[0].id);
   const [sectionId, setSectionId] = useState(contentPages[0].sections[0].id);
@@ -50,7 +50,7 @@ export default function ContentWorkspace({document, values, onChange, onSave, on
     <p className="cms-content-guidance">Choose a page, then a section to update its headings, descriptions and images. Manage services, bookings and vehicles in their dedicated admin areas.</p>
     <nav className="cms-page-tabs" aria-label="Website pages">{contentPages.map(item => <button type="button" key={item.id} aria-current={pageId === item.id ? "page" : undefined} className={pageId === item.id ? "active" : ""} onClick={() => {setPageId(item.id); setSectionId(item.sections[0].id); setQuery("");}}>{item.label}</button>)}</nav>
     <div className="cms-editor-layout">
-      <aside className="cms-section-nav"><div className="cms-section-heading">{page.label.toUpperCase()} SECTIONS</div><nav aria-label={page.label + " content sections"}>{page.sections.map(item => <button type="button" key={item.id} className={section.id === item.id ? "active" : ""} aria-current={section.id === item.id ? "page" : undefined} onClick={() => {setSectionId(item.id); setQuery("");}}>{item.label}</button>)}</nav><div className="cms-access"><Icon name="shield" size={17}/><div><strong>PIN protected</strong><small>Locks at {new Date(accessExpiresAt).toLocaleTimeString("en-GB", {timeZone: "Asia/Karachi", hour: "2-digit", minute: "2-digit"})} PKT</small></div><button disabled={busy} onClick={onLock}>Lock</button></div></aside>
+      <aside className="cms-section-nav"><div className="cms-section-heading">{page.label.toUpperCase()} SECTIONS</div><nav aria-label={page.label + " content sections"}>{page.sections.map(item => <button type="button" key={item.id} className={section.id === item.id ? "active" : ""} aria-current={section.id === item.id ? "page" : undefined} onClick={() => {setSectionId(item.id); setQuery("");}}>{item.label}</button>)}</nav></aside>
       <div className="cms-editor-main">
         <div className="cms-editor-heading"><h2>{page.label} / {section.label}</h2></div>
         <div className="cms-find-bar"><div className="adm-search"><ToolIcon name="search"/><input aria-label="Search content" placeholder="Find a field or phrase..." type="search" value={query} onChange={event => setQuery(event.target.value)}/>{query && <button className="cms-clear-search" aria-label="Clear content search" onClick={() => setQuery("")}><ToolIcon name="close"/></button>}</div></div>
