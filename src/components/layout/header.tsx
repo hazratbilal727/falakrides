@@ -1,14 +1,15 @@
 "use client";
 
+import BrandLogo from "@/components/ui/brand-logo";
 import Link from "./header-link";
 import {useEffect, useRef} from "react";
 import Navigation from "./navigation";
+import HeaderSearch from "./header-search";
 
 import {useSiteCompany, useWebsite} from "@/features/content/public-content";
 
 export default function Header() {
   const company=useSiteCompany();const {copy:c}=useWebsite();
-  const words=company.name.split(/\s+/);const last=words.length>1?words.pop():"";
   const shell = useRef<HTMLDivElement>(null);
   const header = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -23,8 +24,9 @@ export default function Header() {
   return <div className="public-header-shell" ref={shell}>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="header" ref={header}>
-      <Link className="brand" href="/" aria-label={`${company.name} home`}><span className="brand-mark" aria-hidden="true">f<span>&#8599;</span></span><span>{words.join(" ")}<span className="brand-light">{last}</span></span></Link>
+      <Link className="brand" href="/" aria-label={`${company.name} home`}><BrandLogo name={company.name}/></Link>
       <Navigation/>
+      <HeaderSearch/>
       <Link href="/book-a-ride" className="button header-cta" aria-label="Book a ride">{c.bookNow}</Link>
 
     </header>

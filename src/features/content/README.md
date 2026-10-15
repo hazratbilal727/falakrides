@@ -1,6 +1,6 @@
 # Website content management
 
-The Website content screen in `/admin` stores its drafts and published content in Neon PostgreSQL through Prisma. No local content files, local database server, or filesystem storage configuration are used.
+The Website content screen in `/admin` stores its drafts and published content in Neon PostgreSQL through Prisma. The JSON snapshot in `data/public-website.snapshot.json` captures the current public content for review and seeding; the running website reads the database, not this snapshot.
 
 ## Access and editing
 
@@ -34,6 +34,10 @@ Open **Website content → Current public website** to manage the redesigned pub
 
 The `public.website` document is versioned within the existing `SiteContent` record. Structured server validation checks known fields, IDs, unique slugs, collection limits, section types, and image references. Historical content IDs remain valid for existing records; obsolete layout controls are hidden from the editor.
 
-Run `node node_modules/tsx/dist/cli.mjs scripts/sync-public-content.ts` to import the current public defaults into an existing database. The import fills missing fields, preserves existing published content and drafts, records an audit entry, and can be run again safely. No schema migration is required.
+Run `npm run content:snapshot` to capture current published content, public catalog data, page inventory, design notes and image references into `data/public-website.snapshot.json`. Run `npm run content:seed` to fill missing fields from that snapshot in the database. Existing published edits and private drafts are preserved independently. The import validates content, checks versions, records an audit entry, and can be run again safely. No schema migration is required.
+
+The content section also includes page-specific banners, policy paragraphs, contact cards, footer links, form labels and placeholders used by the current UI. These appear under their page or shared-section names. The admin dashboard and other admin sections are unchanged.
+
+Image fields show a preview and an upload control. JPEG, PNG, WebP, GIF and AVIF uploads up to 8 MB go through the authenticated, same-origin, PIN-protected `/api/content/images` route to the configured Cloudinary account, under `CLOUDINARY_UPLOAD_FOLDER/website`. The Cloudinary secure URL becomes the selected field value; Save draft stores it in PostgreSQL, and publishing makes it public. Existing local images and Unsplash identifiers continue to work. API secrets stay on the server. Uploading alone does not publish an image or delete any existing asset.
 
 **Vehicles** manages dispatch fleet records, capacities, category, description, image, and availability. **Fares & routes** manages live route prices, captions, images, and status. **Service areas**, **Offers & packages**, **Reviews & complaints**, and **Settings** continue to synchronize their database-backed public data. Company name, description, phone, and email synchronize between Settings and website content publishing.

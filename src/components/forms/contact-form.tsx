@@ -1,4 +1,5 @@
 "use client";
+import {ContentInput, ContentTextarea} from "@/features/content/public-content";
 import {useSiteContact} from "@/features/content/public-content";
 import {ContentText} from "@/features/content/public-content";
 
@@ -40,10 +41,10 @@ useUnsavedChanges(dirty, () => {form.current?.reset(); setDirty(false);});
     <div className="inquiry-fields">
       {message && <p role="status">{message}</p>}
       <div className="inquiry-row">
-        <label htmlFor="inquiry-name"><ContentText id="inquiry.7" fallback="Your name"/><input id="inquiry-name" name="name" required maxLength={80} autoComplete="name" placeholder="Full name"/></label>
-        <label htmlFor="inquiry-email"><ContentText id="inquiry.8" fallback="Email address"/><input id="inquiry-email" name="email" type="email" required maxLength={160} autoComplete="email" placeholder="you@example.com"/></label>
+        <label htmlFor="inquiry-name"><ContentText id="inquiry.7" fallback="Your name"/><ContentInput id="inquiry-name" name="name" required maxLength={80} autoComplete="name" placeholderId="ui.components-forms-contact-form.1" placeholder="Full name"/></label>
+        <label htmlFor="inquiry-email"><ContentText id="inquiry.8" fallback="Email address"/><ContentInput id="inquiry-email" name="email" type="email" required maxLength={160} autoComplete="email" placeholderId="ui.components-forms-contact-form.2" placeholder="you@example.com"/></label>
       </div>
-      <label htmlFor="inquiry-message"><ContentText id="inquiry.9" fallback="How can we help?"/><textarea id="inquiry-message" name="message" required maxLength={1500} rows={5} placeholder="Tell us about your route, travel dates or any questions you have."/></label>
+      <label htmlFor="inquiry-message"><ContentText id="inquiry.9" fallback="How can we help?"/><ContentTextarea id="inquiry-message" name="message" required maxLength={1500} rows={5} placeholderId="ui.components-forms-contact-form.3" placeholder="Tell us about your route, travel dates or any questions you have."/></label>
       <div className="inquiry-submit"><span><ContentText id="inquiry.10" fallback="No payment details needed."/></span><button className="button" type="submit"><ContentText id="inquiry.11" fallback="Prepare email inquiry "/><Icon size={19}/></button></div>
     </div>
   </form>;

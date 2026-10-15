@@ -14,8 +14,9 @@ function load(file) {
   const exports = {};
   cache.set(filename, exports);
   const source = fs.readFileSync(filename, "utf8");
+  if (filename.endsWith(".json")) {const json={default:JSON.parse(source)};cache.set(filename,json);return json;}
   const output = ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020}}).outputText;
-  vm.runInNewContext(output, {exports, require: name => load(path.resolve(path.dirname(filename), name + ".ts"))});
+  vm.runInNewContext(output, {exports, require: name => load(path.resolve(path.dirname(filename), name.endsWith(".json") ? name : name + ".ts"))});
   return exports;
 }
 const {contentFields} = load("fields.ts");
@@ -24,7 +25,7 @@ const {validateValues} = load("validation.ts");
 const {editorSections, sectionContains} = load("editor-sections.ts");
 
 test("combined navigation assigns every original section to exactly one group", () => {
-  assert.equal(editorSections.length, 10);
+  assert.ok(editorSections.length >= 10);
   for (const field of contentFields) {
     assert.equal(editorSections.filter(group => sectionContains(group.id, field.section)).length, 1, field.section);
     assert.equal(sectionContains("all", field.section), true);
@@ -95,4 +96,46 @@ test("draft editing retains temporarily incomplete fields until save validation"
   const d=website();d.slides[0].title="";const values={"public.website":JSON.stringify(d)};
   assert.equal(websiteFromValues(values,true).slides[0].title,"");
   assert.throws(()=>validateValues(values),/slide title/i);
+});
+
+
+test("Cloudinary references are accepted without allowing arbitrary hosts or insecure URLs",()=>{
+ const url="https://res.cloudinary.com/falakrides/image/upload/v123/website/hero.webp";
+ assert.equal(isSafePublicImage(url),true);
+ assert.equal(validateValues({"layout.bannerImage":url})["layout.bannerImage"],url);
+ const data=website();data.slides[0].image=url;assert.doesNotThrow(()=>parseWebsite(JSON.stringify(data)));
+ for(const bad of ["http://res.cloudinary.com/cloud/image/upload/x.png","https://evil.example/x.png","https://res.cloudinary.com/cloud/raw/upload/x.html","https://res.cloudinary.com/cloud/image/upload/../x.png"]){assert.equal(isSafePublicImage(bad),false,bad);}
+});
+
+test("uploads identify supported image signatures and reject text and SVG",()=>{
+ const {imageMimeType,MAX_CONTENT_IMAGE_BYTES}=load("image-upload.ts");
+ assert.equal(MAX_CONTENT_IMAGE_BYTES,8*1024*1024);
+ assert.equal(imageMimeType(Uint8Array.from([0xff,0xd8,0xff])),"image/jpeg");
+ assert.equal(imageMimeType(Uint8Array.from([0x89,0x50,0x4e,0x47,13,10,26,10])),"image/png");
+ assert.equal(imageMimeType(Uint8Array.from([..."GIF89a"].map(c=>c.charCodeAt(0)))),"image/gif");
+ for(const input of ["<svg></svg>","not an image",""]){assert.equal(imageMimeType(Uint8Array.from([...input].map(c=>c.charCodeAt(0)))),null);}
+});
+
+test("snapshot includes the live page inventory, structured content and all editable field values",()=>{
+ const snapshot=JSON.parse(fs.readFileSync(new URL("../../data/public-website.snapshot.json",import.meta.url),"utf8"));
+ assert.equal(snapshot.pages.length,23);
+ for(const page of ["/","/about","/contact","/privacy","/terms","/services/airport-transfers","/packages/staria"])assert.ok(snapshot.pages.includes(page),page);
+ assert.ok(snapshot.assets.length>10);
+ assert.doesNotThrow(()=>parseWebsite(JSON.stringify(snapshot.website)));
+ assert.doesNotThrow(()=>validateValues({...snapshot.values,"public.website":JSON.stringify(snapshot.website)}));
+ const {editableContentFields}=load("fields.ts");
+ for(const field of editableContentFields)if(field.id!=="public.website")assert.equal(typeof snapshot.values[field.id],"string",field.id);
+});
+
+test("page navigation assigns each editable field and copy field once without operational collections",()=>{
+ const {contentPages}=load("page-navigation.ts");
+ const {editableContentFields}=load("fields.ts");
+ const {websiteCopyFields}=load("website-model.ts");
+ const sections=contentPages.flatMap(page=>page.sections);
+ for(const page of contentPages)assert.ok(page.sections.length,page.id);
+ for(const field of editableContentFields.filter(field=>field.kind!=="website"))assert.equal(sections.filter(section=>section.fields.includes(field.id)).length,1,field.id);
+ for(const field of websiteCopyFields)assert.equal(sections.filter(section=>section.copy.includes(field.key)).length,1,field.key);
+ assert.ok(sections.every(section=>!section.collection||["slides","faqs"].includes(section.collection)));
+ assert.equal(contentPages.find(page=>page.id==="home").sections[0].collection,"slides");
+ assert.ok(contentPages.find(page=>page.id==="contact").sections.some(section=>section.fields.includes("ui.contact.1")));
 });

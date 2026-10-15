@@ -1,5 +1,6 @@
 "use client";
 
+import BrandLogo from "@/components/ui/brand-logo";
 import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import NotificationCenter from "./notification-center";
@@ -142,7 +143,7 @@ export default function AdminApp({initial}: {initial: Snapshot}) {
     <a className="adm-skip" href="#admin-main">Skip to dashboard content</a>
     {menu&&<button className="adm-scrim" onClick={()=>setMenu(false)} aria-label="Close sidebar"/>}
     <aside className={`adm-sidebar ${menu?"is-open":""}`} id="admin-navigation">
-      <Link className="adm-brand" href="/"><span>f<span>↗</span></span><strong>falak<span>rides</span></strong></Link>
+      <Link className="adm-brand" href="/" aria-label="Falak Rides home"><BrandLogo size={40}/></Link>
       <nav aria-label="Admin navigation"><div className="adm-nav-group">{groups.flatMap(group=>group.items).filter(([key]) => key === "overview" || canAccess(initial.user.role, key)).map(([key,label,icon])=><button key={key} className={section===key?"active":""} aria-current={section===key?"page":undefined} onClick={()=>navigate(key)}><AdminIcon name={icon}/><span>{label}</span>{key==="bookings"&&pending>0&&<small>{pending}</small>}</button>)}</div></nav>
     </aside>
     <div className="adm-work-area">

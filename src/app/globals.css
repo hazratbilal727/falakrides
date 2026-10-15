@@ -2319,3 +2319,19 @@ html, body, main,
 .public-header-shell .skip-link { position: fixed; z-index: 60; }
 @media (max-width: 1280px) { .public-header-shell { height: var(--public-header-height, 66px); } }
 @media (max-width: 600px) { .public-header-shell { height: var(--public-header-height, 116px); } }
+
+/* Shared button shape across public pages, admin, dialogs and forms. */
+:root { --button-radius: 7px; }
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a[role="button"],
+a.button,
+a.taxi-button,
+a.adm-button,
+a[class*="-button"],
+a[class*="-btn"],
+a.reference-mobile-book {
+  border-radius: var(--button-radius) !important;
+}

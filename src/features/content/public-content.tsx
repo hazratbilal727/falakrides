@@ -32,6 +32,12 @@ export function PublicContent({initial, catalog: initialCatalog, revision, child
 }
 export function ContentText({id, fallback}: {id: string; fallback: string}) {return useContext(ContentContext)[id] ?? fallback;}
 export function useContentValue(id: string, fallback: string) {return useContext(ContentContext)[id] ?? fallback;}
+export function ContentInput({placeholderId,placeholder="",...props}:React.ComponentProps<"input">&{placeholderId:string}) {
+  return <input {...props} placeholder={useContentValue(placeholderId,placeholder)}/>;
+}
+export function ContentTextarea({placeholderId,placeholder="",...props}:React.ComponentProps<"textarea">&{placeholderId:string}) {
+  return <textarea {...props} placeholder={useContentValue(placeholderId,placeholder)}/>;
+}
 export function useSiteCatalog() {return useContext(CatalogContext);}
 export function useWebsite() {const values=useContext(ContentContext);return useMemo(()=>websiteFromValues(values),[values]);}
 export function useSiteCompany() {const values=useContext(ContentContext);return {name:values["company.name"] || "Falak Rides",description:values["company.description"] || "Private transportation across Makkah, Madinah and Jeddah."};}

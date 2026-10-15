@@ -1,4 +1,5 @@
 import {websiteField} from "./website-model";
+import publicUiFields from "./public-ui-fields.json";
 import {pageFields} from "./page-fields";
 import type {ContentField} from "./types";
 export const contentFields: ContentField[] = [
@@ -1798,10 +1799,12 @@ export const contentFields: ContentField[] = [
     "value": "Plan private transportation across Makkah, Madinah and Jeddah. Explore vehicles and request airport, Umrah and Ziyarat rides with Falak Rides."
   },
   ...pageFields,
+  ...publicUiFields,
+  {id:"layout.bannerImage",section:"Current website",label:"Inner-page banner background",value:"/images/reference/hero-umrah.webp",kind:"image"},
   websiteField,
   {id:"company.name",section:"Company details",label:"Website name",value:"Falak Rides"},
   {id:"company.description",section:"Company details",label:"Company description",value:"Private transportation across Makkah, Madinah and Jeddah."},
 ];
 
 // Keep historical field IDs valid for saved records; show controls used by the current site.
-export const editableContentFields = contentFields.filter(field => !/^(?:home\.|footer\.|navigation\.|page-)/.test(field.id));
+export const editableContentFields = contentFields.filter(field => !/^(?:home\.|footer\.|navigation\.|page-)/.test(field.id) && !/^(?:privacy|terms)\.2$/.test(field.id));

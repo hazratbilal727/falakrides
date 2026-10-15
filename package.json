@@ -14,7 +14,9 @@
     "db:check": "tsx scripts/check-database.ts",
     "cloudinary:check": "node scripts/check-cloudinary.mjs",
     "test:backend": "node --test --test-concurrency=1 tests/integration/backend.test.mjs",
-    "test:browser": "node tests/unsaved-changes.browser.mjs"
+    "test:browser": "node tests/unsaved-changes.browser.mjs",
+    "content:snapshot": "tsx scripts/snapshot-public-content.ts",
+    "content:seed": "tsx scripts/sync-public-content.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

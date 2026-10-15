@@ -49,7 +49,7 @@ const {whatsapp} = useSiteContact();
       <header className="whatsapp-panel-header">
         <span className="whatsapp-avatar"><WhatsAppIcon size={27}/></span>
         <div><h2 id="whatsapp-title"><ContentText id="whatsapp.1" fallback="Falak Rides"/></h2><p><ContentText id="whatsapp.2" fallback="Chat with us on WhatsApp"/></p></div>
-        <button type="button" onClick={close} className="whatsapp-close" aria-label="Close WhatsApp chat">&times;</button>
+        <button type="button" onClick={close} className="whatsapp-close" aria-label="Close WhatsApp chat"><ContentText id="ui.components-shared-whatsapp-chat.1" fallback="&times;"/></button>
       </header>
       <div className="whatsapp-panel-body">
         <div className="whatsapp-welcome"><strong><ContentText id="whatsapp.3" fallback="Let’s plan your journey."/></strong><p><ContentText id="whatsapp.4" fallback="Share your pickup, destination and travel date. Our team can help with your ride and a quote in SAR."/></p></div>
@@ -60,6 +60,6 @@ const {whatsapp} = useSiteContact();
         <small><ContentText id="whatsapp.8" fallback="+966 56 769 1863 · Availability confirmed by our team"/></small>
       </div>
     </section>}
-    <button ref={trigger} className="floating-chat whatsapp-trigger" type="button" aria-expanded={open} aria-controls={open ? "whatsapp-chat" : undefined} aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"} onClick={() => open ? close() : setOpen(true)}>{open ? <span aria-hidden="true">&times;</span> : <WhatsAppIcon size={29}/>}</button>
+    <button ref={trigger} className="floating-chat whatsapp-trigger" type="button" aria-expanded={open} aria-controls={open ? "whatsapp-chat" : undefined} aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"} onClick={() => open ? close() : setOpen(true)}>{open ? <span aria-hidden="true"><ContentText id="ui.components-shared-whatsapp-chat.2" fallback="&times;"/></span> : <WhatsAppIcon size={29}/>}</button>
   </div>;
 }
