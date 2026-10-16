@@ -1,4 +1,4 @@
-﻿.public-header-shell .header{height:82px;min-height:82px;flex-wrap:nowrap;padding:0 max(5%,24px);gap:35px;background:#fff;border-bottom:1px solid #f2f2f2}
+.public-header-shell .header{height:82px;min-height:82px;flex-wrap:nowrap;padding:0 max(5%,24px);gap:35px;background:#fff;border-bottom:1px solid #f2f2f2}
 .public-header-shell .header>.brand{margin-right:auto;flex-shrink:0}
 .public-header-shell .brand-mark{background:#8cc63e;color:#fff}
 .reference-navigation{margin-left:auto}
@@ -61,3 +61,7 @@
   .public-site .reference-navigation .reference-nav a[aria-current="page"] { background: #eff5e8; color: #587d36; }
   .public-site .reference-navigation .reference-nav > .reference-mobile-book { margin-top: 12px; background: #8dc73f; color: #fff; text-align: center; }
 }
+
+/* White content on lime action buttons. */
+.public-site .reference-navigation .reference-nav > .reference-mobile-book { color: #fff; }
+.public-site .reference-navigation .reference-nav > .reference-mobile-book :is(span, small, strong, svg) { color: #fff; }

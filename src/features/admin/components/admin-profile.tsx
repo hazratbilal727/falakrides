@@ -42,7 +42,10 @@ export default function AdminProfile({onNavigate}: {onNavigate: (section: string
 
   function navigate(section: string) { setOpen(false); onNavigate(section); trigger.current?.focus(); }
 
-  function logout() {confirmNavigation(() => {void performLogout();});}
+  function logout() {
+    if (loggingOut || !window.confirm("Are you sure you want to log out?")) return;
+    confirmNavigation(() => {void performLogout();});
+  }
   async function performLogout() {
     setLoggingOut(true);
     setLogoutError("");

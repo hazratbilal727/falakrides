@@ -75,3 +75,7 @@
     color: #32462e;
   }
 }
+
+/* White content on lime action buttons. */
+.header-search form button { color: #fff; }
+.header-search form button :is(span, small, strong, svg) { color: #fff; }

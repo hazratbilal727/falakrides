@@ -8,5 +8,5 @@ export default async function PublicPage({title, description, children}: {title:
   const {published}=await readContent();
   const bannerImage=published["layout.bannerImage"]??"/images/reference/hero-umrah.webp";
   const banner=bannerImage ? photo(bannerImage) : "";
-  return <><main id="main"><section className="taxi-page-banner" style={{backgroundImage:`linear-gradient(90deg,#1d1825c9,#21162cad)${banner ? `,url("${banner}")` : ""}`}}><div className="taxi-container"><nav aria-label="Breadcrumb"><Link href="/"><ContentText id="ui.components-layout-public-page.1" fallback="Home"/></Link><span>/</span><span>{title}</span></nav><h1>{title}</h1><p>{description}</p></div></section><div className="taxi-container taxi-page-content">{children}</div></main><Footer/><WhatsAppChat/></>;
+  return <><main id="main"><section className="taxi-page-banner" style={{backgroundImage:`linear-gradient(90deg,#36501cc9,#36501cad)${banner ? `,url("${banner}")` : ""}`}}><div className="taxi-container"><nav aria-label="Breadcrumb"><Link href="/"><ContentText id="ui.components-layout-public-page.1" fallback="Home"/></Link><span>/</span><span>{title}</span></nav><h1>{title}</h1><p>{description}</p></div></section><div className="taxi-container taxi-page-content">{children}</div></main><Footer/><WhatsAppChat/></>;
 }
