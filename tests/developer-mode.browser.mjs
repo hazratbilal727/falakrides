@@ -40,12 +40,12 @@ try {
   await command('Network.enable');
   await command('Network.setCookies', {cookies: login.headers.getSetCookie().map(value => {const pair=value.split(';')[0];const split=pair.indexOf('=');return {name:pair.slice(0,split),value:pair.slice(split+1),url:base};})});
   for (const method of ['GET','PUT']) {
-    const response = await fetch(base+'/api/admin/developer-mode', {method, headers:{Cookie:cookie,Origin:base,'Content-Type':'application/json'}, ...(method==='PUT'?{body:JSON.stringify({paused:false,version:0})}:{})});
+    const response = await fetch(base+'/api/admin/developer-mode', {method, headers:{Cookie:cookie,Origin:base,'Content-Type':'application/json'}, ...(method==='PUT'?{body:JSON.stringify({paused:false,messageEnabled:false,image:"",audio:"",version:0})}:{})});
     assert.equal(response.status, 403, 'Server rejects '+method+' without a PIN');
   }
   console.log('PASS: authenticated reads and writes require the PIN');
   // Mock only PIN UI responses; no live PIN is created and the pause flag is untouched.
-  await command('Page.addScriptToEvaluateOnNewDocument', {source: `const originalFetch=window.fetch.bind(window);window.fetch=(input,options)=>{const url=new URL(typeof input==='string'?input:input.url,location.origin);if(url.pathname==='/api/admin/developer-mode/access')return Promise.resolve(new Response(JSON.stringify({configured:true}),{status:200,headers:{'Content-Type':'application/json'}}));if(url.pathname==='/api/admin/developer-mode')return Promise.resolve(new Response(JSON.stringify({paused:false,version:0}),{status:200,headers:{'Content-Type':'application/json'}}));return originalFetch(input,options);};`});
+  await command('Page.addScriptToEvaluateOnNewDocument', {source: `const originalFetch=window.fetch.bind(window);window.fetch=(input,options)=>{const url=new URL(typeof input==='string'?input:input.url,location.origin);if(url.pathname==='/api/admin/developer-mode/access')return Promise.resolve(new Response(JSON.stringify({configured:true}),{status:200,headers:{'Content-Type':'application/json'}}));if(url.pathname==='/api/admin/developer-mode')return Promise.resolve(new Response(JSON.stringify({paused:false,messageEnabled:false,image:"",audio:"",version:0}),{status:200,headers:{'Content-Type':'application/json'}}));return originalFetch(input,options);};`});
   await command('Page.navigate', {url:base+'/admin/website-content'});
   await wait('document.querySelector(".cms-page-tabs")');
   const developerTab = () => evaluate(`Array.from(document.querySelectorAll('.cms-page-tabs button')).find(button=>button.textContent==='Developer mode').click()`);
