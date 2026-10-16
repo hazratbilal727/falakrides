@@ -1,0 +1,19 @@
+.web-inbox { margin-bottom: 24px; overflow: hidden; }
+.web-inbox-grid { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr); border-top: 1px solid #e1e8db; }
+.web-inbox-list { max-height: 620px; overflow-y: auto; border-right: 1px solid #e1e8db; }
+.web-inbox-list button { display: flex; flex-direction: column; width: 100%; gap: 8px; text-align: left; padding: 20px; background: #fff; border: 0; border-bottom: 1px solid #e8eee2; color: #344b36; }
+.web-inbox-list button[aria-pressed="true"] { background: #edf5e5; }
+.web-inbox-list button span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; overflow-wrap: anywhere; }
+.web-inbox-list small { color: #63775a; font-size: 11px; }
+.web-inbox-conversation { padding: 24px; min-width: 0; }
+.web-inbox-thread { display: flex; flex-direction: column; gap: 12px; max-height: 330px; overflow-y: auto; margin: 18px 0; padding: 4px; }
+.web-inbox-bubble { align-self: flex-start; max-width: 92%; background: #f1f4f8; padding: 12px 15px; border-radius: 13px 13px 13px 3px; overflow-wrap: anywhere; }
+.web-inbox-bubble[data-sender="admin"] { align-self: flex-end; background: #edf5e5; border-radius: 13px 13px 3px 13px; }
+.web-inbox-bubble strong { font-size: 12px; }
+.admin-app .web-inbox-bubble p { margin: 6px 0; white-space: pre-wrap; line-height: 1.6; }
+.web-inbox-bubble time { color: #6b7963; font-size: 10px; }
+.web-inbox-conversation form { display: flex; flex-direction: column; gap: 12px; }
+.web-inbox-conversation form .adm-button { align-self: flex-end; }
+.web-inbox-empty,.web-inbox-error { padding: 24px; }
+.web-inbox-error { color: #a83226; }
+@media(max-width:700px) { .web-inbox-grid { grid-template-columns: 1fr; } .web-inbox-list { max-height: 220px; border-right: 0; border-bottom: 1px solid #e1e8db; } .web-inbox-conversation { padding: 18px; } }

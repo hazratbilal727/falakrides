@@ -242,6 +242,26 @@ model Inquiry {
   createdAt DateTime @default(now())
 }
 
+model WebConversation {
+  id        String @id @default(cuid())
+  tokenHash String @unique
+  name      String
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  messages  WebMessage[]
+  @@index([updatedAt])
+}
+
+model WebMessage {
+  id             String @id @default(cuid())
+  conversationId String
+  conversation   WebConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         String
+  text           String
+  createdAt      DateTime @default(now())
+  @@index([conversationId, createdAt])
+}
+
 model Notification {
   id         String @id @default(cuid())
   recipient  String

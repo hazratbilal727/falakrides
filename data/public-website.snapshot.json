@@ -15,8 +15,6 @@
     "/packages/staria",
     "/packages/gmc",
     "/packages/hiace",
-    "/packages/coaster",
-    "/packages/bus",
     "/vehicles",
     "/routes",
     "/offers",
@@ -86,7 +84,7 @@
       "whyTitle": "Thoughtful Transport",
       "whyAccent": "for Your Sacred Journey",
       "whyText": "Your journey has its own pace. We help you plan the transport around it, from airport connections to hotel transfers and private Ziyarat itineraries.",
-      "whyImage": "/images/reference/car.png",
+      "whyImage": "/images/reference/gmc-transparent.png",
       "whyBenefits": "Private ride requests\nQuotes in Saudi Riyals\nFamily and group options\nFlexible itinerary planning\nAirport pickup arrangements\nDirect WhatsApp support",
       "calloutLabel": "Ready for Your Next Journey?",
       "calloutTitle": "Book Your Private Ride Today",
@@ -98,7 +96,7 @@
       "faqLabel": "FAQ",
       "faqTitle": "Your Questions,",
       "faqAccent": "Answered",
-      "faqImage": "/images/reference/faq.jpg",
+      "faqImage": "/images/reference/faq-hd.webp",
       "faqLink": "All Frequently Asked Questions",
       "footerLabel": "Let's Plan Your Journey",
       "footerTitle": "Your Partner for Umrah & Ziyarat Travel",
@@ -278,24 +276,6 @@
         "image": "/images/reference/hiace.webp",
         "description": "A van preference for shared family itineraries and small groups.",
         "id": "hiace",
-        "visible": true
-      },
-      {
-        "slug": "coaster",
-        "name": "Coaster",
-        "category": "Minibus",
-        "image": "/images/reference/coaster.png",
-        "description": "A minibus preference for groups with a coordinated travel plan.",
-        "id": "coaster",
-        "visible": true
-      },
-      {
-        "slug": "bus",
-        "name": "Bus",
-        "category": "Coach",
-        "image": "/images/reference/bus.webp",
-        "description": "A coach preference for larger groups and organised pilgrim journeys.",
-        "id": "bus",
         "visible": true
       }
     ],
@@ -869,10 +849,8 @@
   },
   "assets": [
     "/images/reference/airport.webp",
-    "/images/reference/bus.webp",
     "/images/reference/camry.jpg",
     "/images/reference/car.png",
-    "/images/reference/coaster.png",
     "/images/reference/faq.jpg",
     "/images/reference/gmc.webp",
     "/images/reference/hero-family.webp",

@@ -46,6 +46,13 @@
 .public-site .taxi-hero .taxi-button {
   min-width: 180px;
 }
+.taxi-hero-actions { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.public-site .taxi-hero .taxi-hero-message { gap: 9px; background: #ffffff20; border: 1px solid #ffffffa6; color: #fff; }
+.public-site .taxi-hero .taxi-hero-message:hover { background: #ffffff35; color: #fff; }
+@media (max-width: 480px) {
+  .taxi-hero-actions { width: 100%; gap: 10px; }
+  .public-site .taxi-hero-actions .taxi-button { min-width: 0; padding-inline: 20px; }
+}
 .public-site .taxi-slide-copy p {
   white-space: pre-line;
 }
@@ -305,29 +312,125 @@
 .public-site .filter-tabs button.active :is(span, small, strong, svg),
 .public-site .whatsapp-launcher :is(span, small, strong, svg) { color: #fff; }
 
+.public-site .taxi-contact-cards { gap: 20px; margin-bottom: 48px; }
+.public-site .taxi-contact-cards > a {
+  position: relative;
+  align-items: flex-start;
+  text-align: left;
+  gap: 12px;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid #e1e9dc;
+  border-radius: 20px;
+  background: #f0f5fc;
+  box-shadow: 0 6px 24px #263e2d06;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.public-site .taxi-contact-cards > a:nth-child(2) { background: #eff7ed; }
+.public-site .taxi-contact-cards > a:nth-child(3) { background: #f6f1fa; }
+.public-site .taxi-contact-cards > a:first-child .taxi-contact-icon { background: #e2ecfa; border-color: #d4e2f5; }
+.public-site .taxi-contact-cards > a:first-child svg { color: #496b98; }
+.public-site .taxi-contact-cards > a:nth-child(3) .taxi-contact-icon { background: #ede3f5; border-color: #e3d5ee; }
+.public-site .taxi-contact-cards > a:nth-child(3) svg { color: #806194; }
+.public-site .taxi-contact-cards > a:hover {
+  transform: translateY(-4px);
+  border-color: #b4cf98;
+  box-shadow: 0 12px 30px #263e2d10;
+}
+.public-site .taxi-contact-cards .taxi-contact-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 12px;
+  border: 1px solid #e0ebd5;
+  border-radius: 16px;
+  background: #edf5e5;
+}
+.public-site .taxi-contact-cards svg { color: #587b35; }
+.public-site .taxi-contact-cards h2 { margin: 0; color: #293a2c; font-size: 23px; line-height: 1.3; }
+.public-site .taxi-contact-cards > a > span:not(.taxi-contact-icon, .taxi-contact-arrow) { color: #687366; font-size: 14px; }
+.public-site .taxi-contact-cards .taxi-contact-arrow {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e1e9dc;
+  border-radius: 50%;
+  background: #fff;
+  transform: rotate(-45deg);
+}
+@media (max-width: 760px) {
+  .public-site .taxi-contact-cards { gap: 14px; }
+  .public-site .taxi-contact-cards > a { padding: 24px; }
+  .public-site .taxi-contact-cards .taxi-contact-arrow { top: 24px; right: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-site .taxi-contact-cards > a { transition: none; }
+  .public-site .taxi-contact-cards > a:hover { transform: none; }
+}
+
+.public-site .contact-form.inquiry-form {
+  background: #fff;
+  border: 1px solid #e1e9dc;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px #263e2d08;
+}
+.public-site .contact-form.inquiry-form > .inquiry-intro {
+  background: #eff7ed;
+  border-radius: 18px;
+}
+.public-site .inquiry-intro .inquiry-icon {
+  color: #587b35;
+  background: #e3efd9;
+  border-color: #d4e4c5;
+}
+.public-site .inquiry-intro .eyebrow { color: #637653; }
+.public-site .inquiry-intro h3 { color: #293a2c; line-height: 1.25; }
+.public-site .inquiry-intro h3 > span { color: #587b35; }
+.public-site .contact-form .inquiry-intro > p { color: #687366; }
+.public-site .inquiry-intro .inquiry-email {
+  color: #48652e;
+  background: #ffffffb3;
+  border-color: #dce8cf;
+  overflow-wrap: anywhere;
+}
+.public-site .inquiry-form .inquiry-fields input,
+.public-site .inquiry-form .inquiry-fields textarea {
+  border-color: #dfe7db;
+  border-radius: 12px;
+  background: #f8faf6;
+}
+
+.public-site .inquiry-form .inquiry-submit .button {
+  background: #8dc73f;
+  color: #fff;
+}
+.public-site .inquiry-form .inquiry-submit .button:hover { background: #76ad30; color: #fff; }
+.public-site .inquiry-form .inquiry-submit .button svg { color: #fff; }
+
 /* Category pills sit neatly inside each vehicle image. */
 .public-site .taxi-vehicle-card .taxi-category {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  text-align: center;
   top: 14px;
   left: 14px;
   max-width: calc(100% - 28px);
   padding: 7px 12px;
-  border: 1px solid #ffffff30;
+  border: 1px solid #dce8cf;
   border-radius: 999px;
-  background: var(--taxi-accent);
-  color: #fff;
-  box-shadow: 0 3px 10px #36501c20;
+  background: #edf5e5;
+  color: #48652e;
+  box-shadow: none;
   font: 600 11px/1.3 var(--font-taxi-body), Arial, sans-serif;
   letter-spacing: .35px;
   overflow-wrap: anywhere;
 }
 .public-site .taxi-vehicle-card .taxi-category::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--taxi-lime);
+  content: none;
 }

@@ -1,0 +1,25 @@
+.website-message-dialog { width: min(480px, calc(100vw - 28px)); max-height: calc(100dvh - 32px); padding: 28px; border: 1px solid #dfe8d8; border-radius: 22px; background: #fff; color: #293a2c; box-shadow: 0 24px 80px #102c2940; overflow-y: auto; font-family: Arial, sans-serif; }
+.website-message-dialog::backdrop { background: #14261e99; backdrop-filter: blur(4px); }
+.website-message-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.website-message-heading span { color: #66844b; font-size: 10px; letter-spacing: 1.8px; font-weight: 700; }
+.website-message-heading h2 { margin: 8px 0 0; color: #293a2c; font: 600 24px/1.3 Arial,sans-serif; letter-spacing: -.5px; }
+.website-message-close { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%; background: #f0f5eb; color: #48652e; font-size: 25px; }
+.website-message-dialog .website-message-description { margin: 16px 0 20px; color: #687366; font-size: 14px; line-height: 1.6; }
+.website-message-dialog form { display: flex; flex-direction: column; gap: 10px; }
+.website-message-dialog label { display: block; font-size: 13px; font-weight: 600; margin-top: 6px; color: #344b36; }
+.website-message-dialog label span { color: #687366; font-weight: 400; }
+.website-message-dialog input,.website-message-dialog textarea { width: 100%; padding: 13px 14px; border: 1px solid #dce5d7; border-radius: 11px; background: #f8faf6; color: #293a2c; font: 16px/1.5 Arial,sans-serif; }
+.website-message-dialog textarea { resize: vertical; min-height: 110px; }
+.website-message-dialog :is(input,textarea):focus { outline: 2px solid #8dc73f; outline-offset: 2px; }
+.website-message-send { padding: 14px 20px; border: 0; border-radius: 11px; background: #8dc73f; color: #fff; font-size: 15px; font-weight: 600; }
+.website-message-send:disabled { opacity: .6; cursor: wait; }
+.website-message-dialog small { color: #687366; font-size: 12px; line-height: 1.6; }
+.website-message-dialog .website-message-error { color: #a83226; font-size: 13px; margin: 0; }
+.website-message-dialog .website-message-status { color: #48652e; font-size: 13px; margin: 0; }
+.website-message-thread { display: flex; flex-direction: column; gap: 12px; max-height: 260px; overflow-y: auto; padding: 14px; margin-bottom: 16px; border: 1px solid #e3e9df; border-radius: 14px; background: #fafcf8; }
+.website-message-bubble { align-self: flex-end; max-width: 90%; padding: 12px; border-radius: 13px 13px 3px 13px; background: #edf5e5; overflow-wrap: anywhere; }
+.website-message-bubble[data-sender="admin"] { align-self: flex-start; background: #edf2fa; border-radius: 13px 13px 13px 3px; }
+.website-message-bubble strong { color: #344b36; font-size: 12px; }
+.website-message-bubble p { white-space: pre-wrap; margin: 6px 0; color: #344b36; font-size: 14px; line-height: 1.6; }
+.website-message-bubble time { color: #687366; font-size: 10px; }
+@media(max-width:480px) { .website-message-dialog { padding: 22px 18px; } }

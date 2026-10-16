@@ -9,8 +9,6 @@ export const vehiclePackages = [
   {slug: "staria", name: "Staria", category: "Family", image: "/images/reference/staria.webp", description: "A spacious vehicle preference for families travelling together."},
   {slug: "gmc", name: "GMC Yukon XL", category: "Premium", image: "/images/reference/gmc.webp", description: "A premium SUV preference for private transfers and longer journeys."},
   {slug: "hiace", name: "Hiace", category: "Group", image: "/images/reference/hiace.webp", description: "A van preference for shared family itineraries and small groups."},
-  {slug: "coaster", name: "Coaster", category: "Minibus", image: "/images/reference/coaster.png", description: "A minibus preference for groups with a coordinated travel plan."},
-  {slug: "bus", name: "Bus", category: "Coach", image: "/images/reference/bus.webp", description: "A coach preference for larger groups and organised pilgrim journeys."},
 ] as const;
 
 export const itineraries = [
