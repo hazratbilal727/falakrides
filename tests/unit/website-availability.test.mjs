@@ -49,8 +49,9 @@ test("media mode renders a full-screen image, looping audio and no message text"
   assert.match(html,/object-fit:cover/);
   assert.match(html,/<img src="https:/);
   assert.match(html,/autoplay loop/);
-  assert.match(html,/pointerdown/);
-  assert.equal(html.includes("<button"),false);
+  assert.match(html,/id="play-sound"/);
+  assert.match(html,/top:50%;left:50%/);
+  assert.match(html,/button.hidden=true/);
   assert.equal(html.includes(" controls"),false);
   assert.equal(html.includes("audio.pause("),false);
   assert.equal(html.includes('<h1>'),false);
