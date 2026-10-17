@@ -7,19 +7,34 @@ import {canAccess} from "@/features/auth/permissions";
 import {authBaseURL, trustedOrigins} from "@/lib/security/origins";
 export {canAccess} from "@/features/auth/permissions";
 
-export const auth = betterAuth({
-  database: prismaAdapter(db, {provider: "postgresql"}),
-  secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: authBaseURL(),
-  trustedOrigins: async request => trustedOrigins(request),
-  emailAndPassword: {enabled: true, disableSignUp: true, minPasswordLength: 12},
-  user: {additionalFields: {role: {type: "string", defaultValue: "Viewer", input: false}, status: {type: "string", defaultValue: "Active", input: false}}},
-  session: {expiresIn: 60 * 60 * 8, updateAge: 60 * 30, cookieCache: {enabled: false}},
-  rateLimit: {enabled: true, storage: "database", window: 60, max: 60, customRules: {"/sign-in/email": {window: 60, max: 5}}},
+function createAuth() {
+  return betterAuth({
+    database: prismaAdapter(db, {provider: "postgresql"}),
+    secret: process.env.BETTER_AUTH_SECRET,
+    baseURL: authBaseURL(),
+    trustedOrigins: async request => trustedOrigins(request),
+    emailAndPassword: {enabled: true, disableSignUp: true, minPasswordLength: 12},
+    user: {additionalFields: {role: {type: "string", defaultValue: "Viewer", input: false}, status: {type: "string", defaultValue: "Active", input: false}}},
+    session: {expiresIn: 60 * 60 * 8, updateAge: 60 * 30, cookieCache: {enabled: false}},
+    rateLimit: {enabled: true, storage: "database", window: 60, max: 60, customRules: {"/sign-in/email": {window: 60, max: 5}}},
+  });
+}
+
+let authInstance: ReturnType<typeof createAuth> | undefined;
+export function getAuth() {
+  if (!authInstance) authInstance = createAuth();
+  return authInstance;
+}
+export const auth = new Proxy({} as ReturnType<typeof createAuth>, {
+  get(_target, property) {
+    const instance = getAuth();
+    const value = Reflect.get(instance, property, instance);
+    return typeof value === "function" ? value.bind(instance) : value;
+  },
 });
 
 export async function currentAdmin() {
-  const session = await auth.api.getSession({headers: await headers()});
+  const session = await getAuth().api.getSession({headers: await headers()});
   if (!session) return null;
   const user = await db.user.findUnique({where: {id: session.user.id}});
   return user?.status === "Active" ? user : null;
