@@ -1,0 +1,2 @@
+export type BookingStatus = "Pending" | "Confirmed" | "Completed" | "Cancelled";
+export type BookingRequest = {reference:string;pickup:string;destination:string;date:string;time:string;passengers:number;vehicle:string;name:string;phone:string;status:BookingStatus};

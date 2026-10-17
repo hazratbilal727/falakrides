@@ -1,0 +1,1 @@
+export {bookingSchema} from "./server";

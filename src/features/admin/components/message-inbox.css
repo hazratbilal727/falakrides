@@ -1,0 +1,22 @@
+﻿.web-inbox { margin-bottom: 24px; overflow: hidden; }
+.web-management-toolbar { display: flex; align-items: center; gap: 16px; padding: 0 24px 20px; }
+.admin-app .web-management-toolbar input { max-width: 340px; background: #f8faf6; }
+.web-management-toolbar > span { margin-left: auto; color: #7b8771; font-size: 12px; white-space: nowrap; }
+.web-management-list { border-top: 1px solid #e7edde; }
+.web-management-row { display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #edf1e8; }
+.web-management-row:last-child { border-bottom: 0; }
+.web-management-avatar { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 13px; background: #edf5e5; color: #587b35; font-size: 18px; font-weight: 600; }
+.web-management-person { min-width: 0; flex: 1; }
+.web-management-person strong { font-size: 14px; overflow-wrap: anywhere; }
+.admin-app .web-management-person p { margin: 4px 0; color: #79856e; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 500px; }
+.web-management-person small { color: #939d89; font-size: 11px; }
+.web-management-badge { border-radius: 20px; padding: 5px 10px; background: #edf5e5; color: #587b35; font-size: 11px; }
+.web-management-badge[data-blocked="true"] { background: #fcf0ec; color: #a25a45; }
+.web-management-actions { display: flex; align-items: center; gap: 8px; }
+.web-management-actions button { padding: 8px 12px; border: 1px solid #dfe7d8; border-radius: 9px; background: #fff; color: #536548; font-size: 12px; }
+.web-management-actions .web-management-delete { border-color: #efded8; color: #a25a45; }
+.web-management-actions button:disabled { opacity: .5; cursor: wait; }
+.web-inbox-empty,.web-inbox-error,.web-management-status { padding: 16px 24px; }
+.web-inbox-error { color: #a83226; }
+.web-management-status { color: #587b35; }
+@media(max-width:700px) { .web-management-row { flex-wrap: wrap; padding: 18px; gap: 12px; } .web-management-person { flex-basis: calc(100% - 56px); } .web-management-actions { margin-left: auto; } .web-management-toolbar { padding-inline: 18px; } }
