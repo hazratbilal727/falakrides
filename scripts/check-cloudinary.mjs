@@ -1,6 +1,7 @@
 import {config} from "dotenv";
 import {v2 as cloudinary} from "cloudinary";
 config({path: ".env.local", quiet: true});
+config({quiet: true});
 const {CLOUDINARY_CLOUD_NAME: cloud_name, CLOUDINARY_API_KEY: api_key, CLOUDINARY_API_SECRET: api_secret} = process.env;
 if (!cloud_name || !api_key || !api_secret) {
   console.error("Cloudinary environment variables are missing.");
