@@ -48,3 +48,29 @@ test('admin inbox enforces read permission and excludes visitor credentials', as
   assert.equal(query.select.tokenHash, undefined);
   assert.equal(query.select.messages.select.text, true);
 });
+
+test('conversation management requires write access and audits block, unblock and delete', async () => {
+  let allowed = false;
+  const changes = [], audits = [];
+  const route = load('src/app/api/admin/messages/[id]/route.ts', {
+    '@/lib/auth': {requireAdmin: async (resource, write) => {assert.equal(resource, 'feedback'); assert.equal(write, true); if (!allowed) throw new Error('Forbidden'); return {id: 'admin-test'};}},
+    '@/lib/db': {db: {$transaction: async callback => callback({webConversation: {update: async args => {changes.push(args);}, delete: async args => {changes.push(args);}}, auditLog: {create: async args => {audits.push(args.data);}}})}},
+    '@/lib/security/http': {body: request => request.json(), json: value => Response.json(value), failure: error => Response.json({}, {status: error.message === 'Forbidden' ? 403 : 400})},
+  });
+  const request = (method, payload) => new Request('http://localhost/api/admin/messages/test', {method, body: JSON.stringify(payload)});
+  const context = {params: Promise.resolve({id: 'conversation-test'})};
+  assert.equal((await route.PATCH(request('PATCH', {blocked: true}), context)).status, 403);
+  assert.equal((await route.DELETE(request('DELETE', {}), context)).status, 403);
+  assert.equal(changes.length, 0);
+  allowed = true;
+  assert.equal((await route.PATCH(request('PATCH', {blocked: 'yes'}), context)).status, 400);
+  assert.equal((await route.PATCH(request('PATCH', {blocked: true}), context)).status, 200);
+  assert.equal(changes[0].data.blocked, true);
+  assert.equal(audits[0].action, 'block');
+  assert.equal((await route.PATCH(request('PATCH', {blocked: false}), context)).status, 200);
+  assert.equal(changes[1].data.blocked, false);
+  assert.equal(audits[1].action, 'unblock');
+  assert.equal((await route.DELETE(request('DELETE', {}), context)).status, 200);
+  assert.equal(changes[2].where.id, 'conversation-test');
+  assert.equal(audits[2].action, 'delete');
+});

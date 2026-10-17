@@ -14,3 +14,29 @@ export async function POST(request: Request, {params}: {params: Promise<{id: str
     return json({sent: true});
   } catch (error) {return failure(error);}
 }
+
+export async function PATCH(request: Request, {params}: {params: Promise<{id: string}>}) {
+  try {
+    const user = await requireAdmin("feedback", true);
+    const {blocked} = z.object({blocked: z.boolean()}).parse(await body(request, 1000));
+    const {id} = await params;
+    await db.$transaction(async tx => {
+      await tx.webConversation.update({where: {id}, data: {blocked}});
+      await tx.auditLog.create({data: {userId: user.id, action: blocked ? "block" : "unblock", resource: "web-message", recordId: id}});
+    });
+    return json({blocked});
+  } catch (error) {return failure(error);}
+}
+
+export async function DELETE(request: Request, {params}: {params: Promise<{id: string}>}) {
+  try {
+    const user = await requireAdmin("feedback", true);
+    await body(request, 1000);
+    const {id} = await params;
+    await db.$transaction(async tx => {
+      await tx.webConversation.delete({where: {id}});
+      await tx.auditLog.create({data: {userId: user.id, action: "delete", resource: "web-message", recordId: id}});
+    });
+    return json({deleted: true});
+  } catch (error) {return failure(error);}
+}

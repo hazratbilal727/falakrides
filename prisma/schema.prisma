@@ -246,6 +246,7 @@ model WebConversation {
   id        String @id @default(cuid())
   tokenHash String @unique
   name      String
+  blocked   Boolean @default(false)
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   messages  WebMessage[]

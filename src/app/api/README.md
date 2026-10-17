@@ -22,9 +22,9 @@ All JSON responses are no-store. Private handlers enforce database-backed authen
 | `/api/bookings/{reference}` | PATCH | Ownership and optimistic booking version; cancel/reschedule |
 | `/api/bookings/{reference}/checkout` | POST | Ownership, Confirmed status, authoritative fare, configured Stripe |
 | `/api/inquiries` | POST | Validated/rate-limited public inquiries |
-| `/api/messages` | GET, POST | Own opaque chat cookie; validated/rate-limited visitor messages |
+| `/api/messages` | GET, POST, PATCH | Own opaque chat cookie; validated/rate-limited visitor messages and saved name |
 | `/api/admin/messages` | GET | Feedback read permission; website conversation inbox |
-| `/api/admin/messages/{id}` | POST | Feedback write permission; audited reply to visitor |
+| `/api/admin/messages/{id}` | POST, PATCH, DELETE | Feedback write permission; audited reply, block/unblock, or delete conversation and messages |
 | `/api/team/activate` | POST | Unexpired single-use invitation token |
 | `/api/payments/stripe/webhook` | POST | Stripe signature, timestamp, amount/currency/reference checks |
 

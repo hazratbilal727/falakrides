@@ -30,6 +30,7 @@ try {
     await command('Emulation.setDeviceMetricsOverride', {width, height: 850, deviceScaleFactor: 1, mobile: width < 500});
     await evaluate(`document.querySelector('.taxi-slide[data-active="true"] .taxi-hero-message').click()`);
     await wait(`document.querySelector('.website-message-dialog').open`);
+    await wait(`document.querySelector('.website-name-dialog').open`);
     await wait(`!document.querySelector('.website-message-send').disabled`);
     assert.equal(await evaluate(`document.activeElement.id`), 'website-message-name');
     assert.equal(await evaluate(`document.querySelector('#website-message-name').required`), true);
@@ -43,6 +44,65 @@ try {
     await wait(`!document.querySelector('.website-message-dialog').open`);
     console.log(`PASS: ${width}px popup layout, required fields, focus and Escape`);
   }
+  await evaluate(`(() => {
+    window.__savedChat = null;
+    const originalFetch = window.fetch;
+    window.fetch = async (url, options) => {
+      if (url !== '/api/messages') return originalFetch(url, options);
+      if(options?.method === 'PATCH') window.__savedChat = {name:JSON.parse(options.body).name,messages:[]};
+      return Response.json({conversation:window.__savedChat});
+    };
+    document.querySelector('.taxi-slide[data-active="true"] .taxi-hero-message').click();
+  })()`);
+  await wait(`document.querySelector('.website-name-dialog').open`);
+  await evaluate(`(() => {const input=document.querySelector('#website-message-name');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'Saved visitor');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+  await evaluate(`document.querySelector('.website-name-continue').click()`);
+  await wait(`!document.querySelector('.website-name-dialog').open`);
+  await wait(`document.activeElement.id === 'website-message-text'`);
+  assert.equal(await evaluate(`document.querySelector('#website-message-name') === null`), true);
+  await evaluate(`document.querySelector('.website-message-close').click()`);
+  await wait(`!document.querySelector('.website-message-dialog').open`);
+  await evaluate(`document.querySelector('.taxi-slide[data-active="true"] .taxi-hero-message').click()`);
+  await wait(`document.querySelector('.website-message-dialog').open`);
+  assert.equal(await evaluate(`document.querySelector('.website-name-dialog').open`), false);
+  await evaluate(`document.querySelector('.website-message-close').click()`);
+  await wait(`!document.querySelector('.website-message-dialog').open`);
+  console.log('PASS: layered name popup saves name before chatting and stays closed on return');
+  // Stub only chat responses to exercise scrolling without creating database records.
+  await evaluate(`(() => {
+    window.__chatMessages = Array.from({length: 20}, (_, index) => ({id: 'scroll-' + index, sender: index % 2 ? 'admin' : 'visitor', text: 'A message about your travel plans ' + index, createdAt: new Date().toISOString()}));
+    const originalFetch = window.fetch;
+    window.fetch = async (url, options) => {
+      if (url === '/api/messages') {
+        if (options?.method === 'POST') window.__chatMessages.push({id:'sent-last', sender:'visitor', text:JSON.parse(options.body).message, createdAt:new Date().toISOString()});
+        return new Response(JSON.stringify({conversation:{name:'UI test visitor', messages:window.__chatMessages}}), {headers:{'Content-Type':'application/json'}});
+      }
+      return originalFetch(url, options);
+    };
+    document.querySelector('.taxi-slide[data-active="true"] .taxi-hero-message').click();
+  })()`);
+  await wait(`document.querySelectorAll('.website-message-bubble').length === 20`);
+  assert.equal(await evaluate(`document.querySelector('#website-message-name') === null`), true);
+  const atBottom = `(() => {const thread=document.querySelector('.website-message-thread');return Math.abs(thread.scrollHeight-thread.clientHeight-thread.scrollTop)<3;})()`;
+  await wait(atBottom);
+  await evaluate(`window.__chatMessages.push({id:'admin-last',sender:'admin',text:'Your new reply is here.',createdAt:new Date().toISOString()})`);
+  await wait(`document.querySelectorAll('.website-message-bubble').length === 21`);
+  await wait(atBottom);
+  await evaluate(`(() => {const input=document.querySelector('#website-message-text');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,'Thank you for your reply.');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+  assert.equal(await evaluate(`document.querySelector('#website-message-text').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',shiftKey:true,bubbles:true,cancelable:true}))`), true);
+  assert.equal(await evaluate(`document.querySelector('#website-message-text').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true}))`), true);
+  assert.equal(await evaluate(`document.querySelector('#website-message-text').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}))`), false);
+  await wait(`document.querySelectorAll('.website-message-bubble').length === 22`);
+  await wait(atBottom);
+  console.log('PASS: Enter sends, Shift+Enter and composing input preserved, automatic message scrolling');
+  await evaluate(`document.querySelector('.website-message-close').click()`);
+  await wait(`!document.querySelector('.website-message-dialog').open`);
+  await evaluate(`document.querySelector('.taxi-slide[data-active="true"] .taxi-hero-message').click()`);
+  await wait(`document.querySelector('.website-message-dialog').open`);
+  await wait(`document.activeElement.id === 'website-message-text'`);
+  assert.equal(await evaluate(`document.querySelector('#website-message-name') === null`), true);
+  assert.equal(await evaluate(`document.querySelectorAll('.website-message-bubble').length`), 22);
+  console.log('PASS: saved conversation reopens without asking for name');
 } finally {
   socket?.close(); browser.kill();
   await new Promise(resolve => setTimeout(resolve, 1000));
