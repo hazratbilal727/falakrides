@@ -49,3 +49,6 @@ next-env.d.ts
 # Local reference inspection and browser screenshots.
 /tmp/reference/
 /.next-design-check/
+
+# Workspace npm cache.
+/.npm-cache/

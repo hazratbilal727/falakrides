@@ -1478,8 +1478,8 @@ export const contentFields: ContentField[] = [
   {
     "id": "terms.10",
     "section": "terms",
-    "label": "+966 56 769 1863 on WhatsApp",
-    "value": "+966 56 769 1863 on WhatsApp"
+    "label": "+966 56 769 1683 on WhatsApp",
+    "value": "+966 56 769 1683 on WhatsApp"
   },
   {
     "id": "terms.11",
@@ -1734,7 +1734,7 @@ export const contentFields: ContentField[] = [
     "id": "contact.phone",
     "section": "Company details",
     "label": "Phone / WhatsApp number",
-    "value": "+966 56 769 1863",
+    "value": "+966 56 769 1683",
     "kind": "phone"
   },
   {
@@ -1802,6 +1802,11 @@ export const contentFields: ContentField[] = [
   ...publicUiFields,
   {id:"layout.bannerImage",section:"Current website",label:"Inner-page banner background",value:"/images/reference/hero-umrah.webp",kind:"image"},
   websiteField,
+  {id:"contact.facebook",section:"contact",label:"Facebook profile",value:"https://www.facebook.com/profile.php?id=61573320659090"},
+  {id:"contact.instagram",section:"contact",label:"Instagram profile",value:"https://www.instagram.com/alfalakrides/"},
+  {id:"contact.linkedin",section:"contact",label:"LinkedIn profile",value:"https://www.linkedin.com/company/145242047/"},
+  {id:"contact.tiktok",section:"contact",label:"TikTok profile",value:"https://www.tiktok.com/@al.falak.rides"},
+  {id:"contact.youtube",section:"contact",label:"YouTube channel",value:"https://www.youtube.com/@FalakRides"},
   {id:"company.name",section:"Company details",label:"Website name",value:"Falak Rides"},
   {id:"company.description",section:"Company details",label:"Company description",value:"Private transportation across Makkah, Madinah and Jeddah."},
 ];

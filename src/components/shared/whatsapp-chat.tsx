@@ -61,7 +61,7 @@ const {whatsapp} = useSiteContact();
         <label htmlFor="whatsapp-message"><ContentText id="whatsapp.6" fallback="Your message"/></label>
         <textarea id="whatsapp-message" ref={input} value={message} maxLength={1500} onChange={event => setMessage(event.target.value)} placeholder="Hello! I need a ride from..." rows={4}/>
         <a className="whatsapp-send" href={`${whatsapp}?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener noreferrer"><WhatsAppIcon size={21}/> <ContentText id="whatsapp.7" fallback=" Continue to WhatsApp "/><span aria-hidden="true">&#8599;</span></a>
-        <small><ContentText id="whatsapp.8" fallback="+966 56 769 1863 · Availability confirmed by our team"/></small>
+        <small><ContentText id="whatsapp.8" fallback="+966 56 769 1683 · Availability confirmed by our team"/></small>
       </div>
     </section>}
     <button ref={trigger} className="floating-chat whatsapp-trigger" type="button" aria-expanded={open} aria-controls={open ? "whatsapp-chat" : undefined} aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"} onClick={() => open ? close() : setOpen(true)}>{open ? <CloseIcon/> : <WhatsAppIcon size={29}/>}</button>

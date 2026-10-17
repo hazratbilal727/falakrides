@@ -1,0 +1,59 @@
+.contact-popup { width: min(880px, calc(100vw - 40px)); max-height: calc(100dvh - 40px); padding: 6px; border: 1px solid #ffffff80; border-radius: 22px; color: #26352c; background: #fff; box-shadow: 0 30px 100px #10251b55; overflow: auto; }
+.contact-popup::backdrop { background: #13271dcc; backdrop-filter: blur(5px); }
+.contact-popup-layout { display: grid; grid-template-columns: .9fr 1.1fr; }
+.contact-popup-close { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid #e3e8df; border-radius: 50%; background: #fff; color: #314332; font-size: 26px; cursor: pointer; z-index: 1; }
+.contact-popup-details { padding: 28px; border: 1px solid #e3edda; border-radius: 16px; background: radial-gradient(ellipse at top left, #dff0c8 0, transparent 65%), linear-gradient(145deg, #f0f7e9, #f8faf5); }
+.contact-popup-eyebrow { display: block; margin-bottom: 9px; color: #67942f; font-size: 10px; font-weight: 700; letter-spacing: 1.6px; }
+.public-site .contact-popup h2 { font-size: 32px; color: #293f2d; margin-bottom: 12px; }
+.public-site .contact-popup h3 { font-size: 28px; color: #293f2d; margin-bottom: 8px; }
+.public-site .contact-popup p { font-size: 13px; line-height: 1.6; color: #72806e; margin-bottom: 12px; }
+.contact-popup-whatsapp { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 14px; margin: 18px 0; border-radius: 10px; background: #79ae36; color: #fff; font-size: 13px; font-weight: 600; transition: background .2s, transform .2s; }
+.contact-popup-whatsapp:hover { background: #67962d; }
+.contact-popup-contact { display: flex; align-items: center; gap: 11px; margin-top: 14px; color: #324b32; font-size: 13px; overflow-wrap: anywhere; }
+.contact-popup-contact > svg { flex-shrink: 0; box-sizing: content-box; padding: 9px; border: 1px solid #dfebd5; border-radius: 10px; background: #ffffffb3; color: #719d3f; }
+.contact-popup-contact small { display: block; margin-bottom: 4px; color: #7c8876; font-size: 10px; letter-spacing: 1px; }
+.contact-popup-social { margin-top: 20px; padding-top: 14px; border-top: 1px solid #dfe8d5; }
+.contact-popup-social > span { font-size: 12px; color: #778571; }
+.contact-popup-social nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.contact-popup-social .contact-social-button { --social-shadow: #253c2026; position: relative; isolation: isolate; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #ffffff45; border-radius: 14px; color: #fff; box-shadow: inset 0 1px 0 #ffffff35, 0 4px 10px var(--social-shadow); transition: transform .2s ease, box-shadow .2s ease, filter .2s ease; }
+.contact-popup-social .contact-social-button::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(145deg, #ffffff25, transparent 60%); pointer-events: none; }
+.contact-popup-social .contact-social-button > svg { width: 21px; height: 21px; filter: drop-shadow(0 1px 1px #00000018); }
+.contact-popup-social .contact-social-button:hover { transform: translateY(-3px); filter: brightness(1.07); box-shadow: inset 0 1px 0 #ffffff50, 0 8px 16px var(--social-shadow); }
+.contact-popup-social .contact-social-button:active { transform: translateY(0) scale(.96); }
+.contact-popup-social .contact-social-button:focus-visible { outline: 2px solid #263e2b; outline-offset: 4px; }
+.contact-popup-social .contact-social-facebook { --social-shadow: #1877f233; background: linear-gradient(145deg, #298bff, #1260db); }
+.contact-popup-social .contact-social-instagram { --social-shadow: #d6297638; background: radial-gradient(circle at 25% 110%, #ffdc80 0, #fcaf45 18%, #f77737 30%, transparent 55%), linear-gradient(140deg, #7638c0, #c13584 50%, #e1306c); }
+.contact-popup-social .contact-social-linkedin { --social-shadow: #0a66c233; background: linear-gradient(145deg, #1685d5, #075da9); }
+.contact-popup-social .contact-social-tiktok { --social-shadow: #15222d33; background: linear-gradient(145deg, #303c45, #10171c); }
+.contact-social-tiktok > svg { filter: drop-shadow(-1px -1px 0 #25f4ee) drop-shadow(1px 1px 0 #fe2c55) !important; }
+.contact-popup-social .contact-social-youtube { --social-shadow: #ee232333; background: linear-gradient(145deg, #ff4545, #e10d19); }
+.contact-popup-form-panel { display: flex; flex-direction: column; padding: 28px; }
+.contact-popup form { display: flex; flex-direction: column; flex: 1; gap: 13px; margin-top: 18px; }
+.contact-popup-message { flex: 1; grid-template-rows: auto 1fr; }
+.contact-popup-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.contact-popup label { display: grid; gap: 6px; color: #455440; font-size: 12px; font-weight: 600; }
+.contact-popup :is(input,textarea) { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid #e1e7dc; border-radius: 10px; background: #f8faf6; padding: 10px 12px; color: #26352c; font-size: 14px; font-weight: 400; transition: border-color .2s, background .2s; }
+.contact-popup textarea { resize: vertical; min-height: 150px; height: 100%; }
+.contact-popup :is(input,textarea):focus { outline: none; background: #fff; border-color: #8bb65e; box-shadow: 0 0 0 3px #91bd6426; }
+.public-site .contact-popup .contact-popup-note { margin: 0; font-size: 11px; line-height: 1.6; }
+.public-site .contact-popup .contact-popup-status { margin: 0; color: #487322; font-size: 12px; }
+.contact-popup form > button { margin-top: auto; flex-shrink: 0; width: 100%; min-height: 43px; padding: 10px 20px; border-radius: 10px; background: linear-gradient(110deg, #82b83d, #6c9f2f); box-shadow: 0 4px 12px #75a83526; }
+.contact-popup form > button:hover { background: linear-gradient(110deg, #73a732, #608f29); }
+.contact-popup-close:hover { background: #f2f6ed; border-color: #afc396; }
+@media (prefers-reduced-motion: reduce) {
+  .contact-popup-social nav > a { transition: none; }
+  .contact-popup-social nav > a:hover, .contact-popup-social nav > a:active { transform: none; }
+}
+.public-site .taxi-hero-contact { background: transparent; color: #fff; border: 1px solid #ffffffb3; padding: 13px 26px; }
+.public-site .taxi-hero-contact:hover { background: transparent; color: #fff; border-color: #fff; }
+@media (max-width: 680px) {
+  .contact-popup { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); border-radius: 12px; }
+  .contact-popup-layout { grid-template-columns: 1fr; }
+  .contact-popup-details, .contact-popup-form-panel { padding: 22px 18px; }
+  .public-site .contact-popup h2 { font-size: 27px; padding-right: 24px; }
+  .contact-popup-social { margin-top: 14px; padding-top: 12px; }
+  .contact-popup :is(input,textarea) { font-size: 16px; }
+}
+@media (max-width: 380px) {
+  .contact-popup-fields { grid-template-columns: 1fr; }
+}

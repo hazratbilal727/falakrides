@@ -10,7 +10,7 @@ import "./footer.css";
 export default async function Footer() {
   const {published} = await readContent();
   const {copy: c, services} = websiteFromValues(published);
-  const phone = published["contact.phone"] ?? "+966 56 769 1863";
+  const phone = published["contact.phone"] ?? "+966 56 769 1683";
   const email = published["contact.email"] ?? "falakrides56@gmail.com";
   const name = published["company.name"] ?? "Falak Rides";
   const ziyarat = services.find(service => service.visible && service.slug.includes("ziyarat"));
@@ -35,7 +35,6 @@ export default async function Footer() {
           <nav aria-label="Company">
             <Link href="/about"><Icon name="user" size={17}/>{c.navAbout}</Link>
             <Link href="/contact"><Icon name="mail" size={17}/>{c.navContact}</Link>
-            <Link href="/my-bookings"><Icon name="calendar" size={16}/><ContentText id="ui.components-layout-footer.1" fallback="My Bookings"/></Link>
           </nav>
           <div className="taxi-footer-contact">
             <span>{c.footerConnect}</span>

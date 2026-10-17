@@ -29,7 +29,7 @@ export const defaultWebsite: WebsiteData = {
   copy: Object.fromEntries(websiteCopyFields.map(field => [field.key,field.value])),
   slides: [
     {id:"slide-umrah",visible:true,image:"/images/reference/hero-umrah.webp",title:"Comfortable Umrah Taxi & Ziyarat Services",text:"Private transportation across Makkah, Madinah, and Jeddah. Let Falak Rides take care of your next journey."},
-    {id:"slide-airport",visible:true,image:"/images/reference/hero-transfer.png",title:"Airport Transfers Made Simple",text:"From your first arrival to your final destination, arrange a private ride around your travel plans.\nPlan airport pickups and hotel transfers across Makkah, Madinah, and Jeddah.\nShare your travel dates, passengers, and luggage needs with Falak Rides."},
+    {id:"slide-airport",visible:true,image:"/images/reference/hero-transfer.png",title:"Airport Transfers Made Simple",text:"From your first arrival to your final destination, arrange a private ride around your travel plans."},
     {id:"slide-family",visible:true,image:"/images/reference/hero-family.webp",title:"Travel Together. Arrive in Comfort.",text:"Plan the right ride for your family or group, with room for the journey ahead."},
   ],
   services: servicePages.map(service => ({...service,id:service.slug,visible:true,sections:service.sections.map(section => ({...section,items:[...section.items]}))})),

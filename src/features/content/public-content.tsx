@@ -43,6 +43,6 @@ export function useWebsite() {const values=useContext(ContentContext);return use
 export function useSiteCompany() {const values=useContext(ContentContext);return {name:values["company.name"] || "Falak Rides",description:values["company.description"] || "Private transportation across Makkah, Madinah and Jeddah."};}
 export function useSiteContact() {
   const values = useContext(ContentContext);
-  const phone = values["contact.phone"] ?? "+966 56 769 1863";
+  const phone = values["contact.phone"] ?? "+966 56 769 1683";
   return {phone, email: values["contact.email"] ?? "falakrides56@gmail.com", whatsapp: `https://wa.me/${phone.replace(/\D/g, "")}`};
 }

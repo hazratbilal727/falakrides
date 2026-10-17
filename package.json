@@ -16,7 +16,8 @@
     "test:backend": "node --test --test-concurrency=1 tests/integration/backend.test.mjs",
     "test:browser": "node tests/unsaved-changes.browser.mjs",
     "content:snapshot": "tsx scripts/snapshot-public-content.ts",
-    "content:seed": "tsx scripts/sync-public-content.ts"
+    "content:seed": "tsx scripts/sync-public-content.ts",
+    "test": "node --test tests/unit/*.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

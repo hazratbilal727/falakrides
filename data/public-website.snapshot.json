@@ -136,7 +136,7 @@
         "visible": true,
         "image": "/images/reference/hero-transfer.png",
         "title": "Airport Transfers Made Simple",
-        "text": "From your first arrival to your final destination, arrange a private ride around your travel plans.\nPlan airport pickups and hotel transfers across Makkah, Madinah, and Jeddah.\nShare your travel dates, passengers, and luggage needs with Falak Rides."
+        "text": "From your first arrival to your final destination, arrange a private ride around your travel plans."
       },
       {
         "id": "slide-family",
@@ -529,7 +529,7 @@
     "terms.7": "Agree on pickup and drop-off, dates and local pickup times, passenger and luggage requirements, the total price, any extra charges, accepted payment method and cancellation or rescheduling terms with the team before accepting a ride.",
     "terms.8": "Changes to your journey",
     "terms.9": "Contact ",
-    "terms.10": "+966 56 769 1863 on WhatsApp",
+    "terms.10": "+966 56 769 1683 on WhatsApp",
     "terms.11": " for questions or changes. Business-specific cancellation, refund and waiting policies have not yet been supplied and must be communicated with your quote.",
     "vehicle.0.name": "Economy sedan",
     "vehicle.0.description": "A simple, comfortable choice for everyday journeys.",
@@ -569,7 +569,7 @@
     "location.3": "Madinah Airport (MED)",
     "location.4": "Jeddah",
     "location.5": "Hotel / other location",
-    "contact.phone": "+966 56 769 1863",
+    "contact.phone": "+966 56 769 1683",
     "contact.email": "falakrides56@gmail.com",
     "seo.title": "Falak Rides | Private Rides, Umrah & Airport Transfers in Saudi Arabia",
     "seo.description": "Plan private transportation across Makkah, Madinah and Jeddah. Explore vehicles and request airport, Umrah and Ziyarat rides with Falak Rides.",
@@ -748,7 +748,12 @@
     "ui.features-bookings-components-booking.6": "+966 …",
     "layout.bannerImage": "/images/reference/hero-umrah.webp",
     "company.name": "Falak Rides",
-    "company.description": "Private transportation across Makkah, Madinah and Jeddah."
+    "company.description": "Private transportation across Makkah, Madinah and Jeddah.",
+    "contact.facebook": "https://www.facebook.com/profile.php?id=61573320659090",
+    "contact.instagram": "https://www.instagram.com/alfalakrides/",
+    "contact.linkedin": "https://www.linkedin.com/company/145242047/",
+    "contact.tiktok": "https://www.tiktok.com/@al.falak.rides",
+    "contact.youtube": "https://www.youtube.com/@FalakRides"
   },
   "catalog": {
     "vehicles": [

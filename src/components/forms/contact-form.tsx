@@ -6,7 +6,6 @@ import {ContentText} from "@/features/content/public-content";
 import Icon from "@/components/ui/icon";
 import {useRef, useState} from "react";
 import {useUnsavedChanges} from "./unsaved-changes";
-import {api} from "@/lib/api-client";
 
 function MailIcon() {
   return <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>;
@@ -16,7 +15,6 @@ export default function ContactForm() {
 const {email} = useSiteContact();
 const form = useRef<HTMLFormElement>(null);
 const [dirty, setDirty] = useState(false);
-const [busy, setBusy] = useState(false);
 const [message, setMessage] = useState("");
 useUnsavedChanges(dirty, () => {form.current?.reset(); setDirty(false);});
 
@@ -25,10 +23,8 @@ useUnsavedChanges(dirty, () => {form.current?.reset(); setDirty(false);});
     const fields = new FormData(event.currentTarget);
     const subject = `Website inquiry from ${String(fields.get("name")).trim()}`;
     const body = `${String(fields.get("message")).trim()}\n\nReply to: ${String(fields.get("email")).trim()}`;
-    if (busy) return; setBusy(true); setMessage("");
-    try {await api("/api/inquiries", {method: "POST", body: JSON.stringify(Object.fromEntries(fields))}); setDirty(false); form.current?.reset(); setMessage("Your inquiry has been received."); window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;}
-    catch (error) {setMessage(error instanceof Error ? error.message : "Your inquiry could not be sent. Please try again.");}
-    finally {setBusy(false);}
+
+    setDirty(false); setMessage("Your email is ready. Send it from your email app."); window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }}>
     <div className="inquiry-intro">
       <span className="inquiry-icon"><MailIcon/></span>

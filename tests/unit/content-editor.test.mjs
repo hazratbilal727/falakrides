@@ -69,7 +69,7 @@ const website=()=>JSON.parse(JSON.stringify(defaultWebsite));
 test("current public data is registered with the existing draft and publish editor",()=>{
   assert.equal(contentFields.find(field=>field.id==="public.website").kind,"website");
   assert.equal(parseWebsite(websiteField.value).services.length,3);
-  assert.equal(parseWebsite(websiteField.value).vehicles.length,6);
+  assert.equal(parseWebsite(websiteField.value).vehicles.length,4);
   assert.equal(websiteFromValues({}).faqs.length,6);
   assert.equal(validateValues({"public.website":websiteField.value})["public.website"],websiteField.value);
 });
@@ -118,7 +118,7 @@ test("uploads identify supported image signatures and reject text and SVG",()=>{
 
 test("snapshot includes the live page inventory, structured content and all editable field values",()=>{
  const snapshot=JSON.parse(fs.readFileSync(new URL("../../data/public-website.snapshot.json",import.meta.url),"utf8"));
- assert.equal(snapshot.pages.length,23);
+ assert.equal(snapshot.pages.length,21);
  for(const page of ["/","/about","/contact","/privacy","/terms","/services/airport-transfers","/packages/staria"])assert.ok(snapshot.pages.includes(page),page);
  assert.ok(snapshot.assets.length>10);
  assert.doesNotThrow(()=>parseWebsite(JSON.stringify(snapshot.website)));

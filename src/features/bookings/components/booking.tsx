@@ -1,37 +1,94 @@
-"use client";
-import {ContentInput} from "@/features/content/public-content";
-import {useSiteContact} from "@/features/content/public-content";
-import {ContentText, useContentValue} from "@/features/content/public-content";
-import {useEffect,useRef,useState} from "react";
-import {api} from "@/lib/api-client";
-import {useSiteCatalog} from "@/features/content/public-content";
+﻿"use client";
 
-import {useUnsavedChanges} from "@/components/forms/unsaved-changes";
+import {useId, useRef, useState} from "react";
 import Icon from "@/components/ui/icon";
-export default function Booking({preference}: {preference?: {vehicle?: string; package?: string}} = {}){
-const {whatsapp} = useSiteContact();
+import {useSiteCatalog, useSiteContact} from "@/features/content/public-content";
+import {useUnsavedChanges} from "@/components/forms/unsaved-changes";
+import "./booking.css";
+import DatePicker from "./date-picker";
 
-const {vehicles, locations, fares} = useSiteCatalog();
-const gmc = useContentValue("booking.21", "GMC vehicle"), civic = useContentValue("booking.22", "Honda Civic");
+type Details = {name: string; phone: string; pickup: string; destination: string; date: string; time: string; returnDate: string; returnTime: string; vehicle: string; passengers: string; luggage: string; address: string; notes: string; roundTrip: boolean};
 
-const [trip,setTrip]=useState("One way"),[step,setStep]=useState(0),[error,setError]=useState(""),[reference,setReference]=useState("");
-const [details,setDetails]=useState<Record<string,string>>({pickup:"",destination:"",date:"",time:"",passengers:"1",luggage:"1",vehicle:vehicles.find(vehicle => vehicle.name.toLowerCase() === preference?.vehicle?.toLowerCase())?.name || vehicles[0]?.name || "",name:"",phone:"",flight:"",notes:[preference?.vehicle ? `Requested vehicle: ${preference.vehicle}` : "", preference?.package ? `Requested package: ${preference.package}` : ""].filter(Boolean).join("; "),returnDate:"",stops:""});
-const estimate = trip === "Round trip" || details.stops || !vehicles.some(vehicle => vehicle.name === details.vehicle) ? null : fares?.find(fare => fare.route.toLowerCase() === `${details.pickup} → ${details.destination}`.toLowerCase())?.fare ?? null;
-const [submitting, setSubmitting] = useState(false);
-const idempotencyKey = useRef("");
-const [dirty, setDirty] = useState(Boolean(preference?.vehicle || preference?.package));
-useUnsavedChanges(dirty, () => {setDirty(false); setTrip("One way"); setStep(0); setDetails({pickup:"",destination:"",date:"",time:"",passengers:"1",luggage:"1",vehicle:vehicles[0]?.name || "",name:"",phone:"",flight:"",notes:"",returnDate:"",stops:""});});
-useEffect(() => {
-  function selectVehicle(event: Event) {
-    const name = (event as CustomEvent<string>).detail;
-    if (!vehicles.some(vehicle => vehicle.name === name)) return;
-    setDetails(current => ({...current, vehicle: name})); setDirty(true);
-    setStep(0);
+
+export default function Booking({preference}: {preference?: {vehicle?: string; package?: string}} = {}) {
+  const {vehicles, locations} = useSiteCatalog();
+  const {whatsapp} = useSiteContact();
+  const initial: Details = {name: "", phone: "", pickup: "", destination: "", date: "", time: "", returnDate: "", returnTime: "", vehicle: vehicles.find(item => item.name.toLowerCase() === preference?.vehicle?.toLowerCase())?.name || "", passengers: "1", luggage: "1", address: "", notes: [preference?.package ? `Requested package: ${preference.package}` : "", preference?.vehicle && !vehicles.some(item => item.name.toLowerCase() === preference.vehicle?.toLowerCase()) ? `Requested vehicle: ${preference.vehicle}` : ""].filter(Boolean).join("\n"), roundTrip: false};
+  const [details, setDetails] = useState<Details>(initial);
+  const [dirty, setDirty] = useState(Boolean(preference?.vehicle || preference?.package));
+  const [error, setError] = useState("");
+  const [preview, setPreview] = useState(false);
+  const [status, setStatus] = useState("");
+  const summary = useRef<HTMLElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+  const listId = useId();
+  useUnsavedChanges(dirty, () => {setDetails(initial); setDirty(false); setPreview(false); setError("");});
+  const today = new Intl.DateTimeFormat("en-CA", {timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit"}).format(new Date());
+  const vehicle = vehicles.find(item => item.name === details.vehicle);
+  const choices = [...new Set([...locations, "Makkah", "Madinah", "Jeddah", "Jeddah Airport (JED)", "Madinah Airport (MED)"])];
+  function update<K extends keyof Details>(key: K, value: Details[K]) {setDetails(current => ({...current, [key]: value})); setDirty(true); setPreview(false); setError(""); setStatus("");}
+  function validate() {
+    if (!details.name.trim()) return "Please enter your full name.";
+    if (details.phone.replace(/\D/g, "").length < 8) return "Enter a valid phone number including country code.";
+    if (!details.pickup.trim() || !details.destination.trim()) return "Add your pickup and drop-off locations.";
+    if (details.pickup.trim().toLowerCase() === details.destination.trim().toLowerCase()) return "Choose different pickup and drop-off locations.";
+    const pickup = new Date(`${details.date}T${details.time}:00+03:00`).getTime();
+    if (!Number.isFinite(pickup) || pickup <= Date.now()) return "Choose a future pickup date and time in Saudi Arabia time.";
+    if (details.roundTrip) {
+      const returning = new Date(`${details.returnDate}T${details.returnTime}:00+03:00`).getTime();
+      if (!Number.isFinite(returning) || returning <= pickup) return "Choose a return date and time after your pickup.";
+    }
+    if (!vehicle) return "Please choose a vehicle.";
+    if (Number(details.passengers) > vehicle.passengers || Number(details.luggage) > vehicle.bags) return "Choose a larger vehicle or reduce the passenger and luggage counts to fit your selected vehicle.";
+    return "";
   }
-  window.addEventListener("falak:select-vehicle", selectVehicle);
-  return () => window.removeEventListener("falak:select-vehicle", selectVehicle);
-}, [vehicles]);
-const update=(key:string,value:string)=>{setDetails({...details,[key]:value}); setDirty(true);};
-async function next(e:React.FormEvent<HTMLFormElement>){e.preventDefault();setError("");if(details.pickup.trim().toLowerCase()===details.destination.trim().toLowerCase()){setError("Please choose different pickup and destination locations.");return;}if(new Date(`${details.date}T${details.time}:00+03:00`)<=new Date()){setError("Please choose a pickup date and time in the future.");return;}if(trip==="Round trip"&&details.returnDate<details.date){setError("The return date must be on or after your pickup date.");return;}if(step===0){setStep(1);return;}if(details.phone.replace(/\D/g,"").length<8){setError("Enter a valid contact number, including country code.");return;}if(submitting)return;setSubmitting(true);if(!idempotencyKey.current)idempotencyKey.current=crypto.randomUUID();try{const result=await api<{booking:{reference:string}}>("/api/bookings",{method:"POST",body:JSON.stringify({...details,timing:"later",journey:trip==="Round trip"?"round-trip":"one-way",returnTime:details.time,stops:details.stops?details.stops.split(",").map(value=>value.trim()).filter(Boolean):[],notes:[details.notes,details.flight?`Flight: ${details.flight}`:""].filter(Boolean).join("; "),idempotencyKey:idempotencyKey.current})});setReference(result.booking.reference);setDirty(false);setStep(2);}catch(error){setError(error instanceof Error?error.message:"Your request could not be saved.");}finally{setSubmitting(false);}}
-const message=`Hello Falak Rides, I would like to request a ride.\nReference: ${reference}\n${Object.entries(details).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`).join("\n")}\nTrip: ${trip}\nPlease confirm availability and the total fare in SAR.`;
-return <section className="booking" id="booking" aria-label="Request a ride">{step===2?<div className="request-ready" role="status"><span className="eyebrow"><ContentText id="booking.1" fallback="YOUR JOURNEY STARTS HERE"/></span><h2><ContentText id="booking.2" fallback="Your request is ready to send."/></h2><p><ContentText id="booking.3" fallback="Reference "/><strong>{reference}</strong><ContentText id="booking.4" fallback=". This request has been received and is awaiting confirmation. Send it on WhatsApp so our team can confirm your vehicle, total fare in SAR, and pickup details."/></p><a className="button" href={`${whatsapp}?text=${encodeURIComponent(message)}`} target="_blank" rel="noopener noreferrer"><Icon name="chat"/> <ContentText id="booking.5" fallback=" Send request on WhatsApp "/><Icon/></a><button className="text-button" onClick={()=>setStep(1)}><ContentText id="booking.6" fallback="Edit request"/></button></div>:<form onSubmit={next}><div className="booking-heading"><div><span className="eyebrow"><ContentText id="booking.7" fallback="YOUR NEXT JOURNEY"/></span><h2><ContentText id="booking.8" fallback="Plan your ride."/></h2><p><ContentText id="booking.9" fallback="A few details now. A smoother journey ahead."/></p></div><span className="booking-step"><span aria-hidden="true">1</span> <ContentText id="booking.10" fallback=" Route "/><i aria-hidden="true"/> <span aria-hidden="true">2</span> <ContentText id="booking.11" fallback=" Details "/><i aria-hidden="true"/> <span aria-hidden="true">3</span> <ContentText id="booking.12" fallback=" Request"/></span></div><div className="booking-top"><div className="trip-tabs">{["One way","Round trip"].map(t=><button type="button" key={t} onClick={()=>{setTrip(t);setDirty(true);}} className={trip===t?"selected":""}>{t}</button>)}</div><span className="booking-note"><Icon name="shield" size={15}/> <ContentText id="booking.13" fallback=" Your ride. Your schedule."/></span></div>{step===0?<><div className="booking-grid"><label><span><Icon name="pin" size={17}/> <ContentText id="booking.14" fallback=" Pickup location"/></span><ContentInput required list="locations" placeholderId="ui.features-bookings-components-booking.3" placeholder="Where from?" value={details.pickup} onChange={e=>update("pickup",e.target.value)} maxLength={160}/></label><label><span><Icon name="pin" size={17}/> <ContentText id="booking.15" fallback=" Destination"/></span><ContentInput required list="locations" placeholderId="ui.features-bookings-components-booking.4" placeholder="Where to?" value={details.destination} onChange={e=>update("destination",e.target.value)} maxLength={160}/></label><label><span><ContentText id="booking.16" fallback="Pickup date"/></span><input aria-label="Pickup date" type="date" required min={new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Riyadh"})} value={details.date} onChange={e=>update("date",e.target.value)}/></label><label><span><ContentText id="booking.17" fallback="Pickup time (KSA)"/></span><input type="time" required value={details.time} onChange={e=>update("time",e.target.value)}/></label><label><span><ContentText id="booking.18" fallback="Passengers"/></span><select value={details.passengers} onChange={e=>update("passengers",e.target.value)}>{Array.from({length:16},(_,i)=><option key={i} value={i+1}>{i+1} {i===0?"passenger":"passengers"}</option>)}</select></label><button className="button search" type="submit" disabled={submitting}><ContentText id="booking.19" fallback="Plan my ride "/><Icon/></button></div><div className="booking-extras"><label><ContentText id="ui.features-bookings-components-booking.1" fallback="Stops (optional)"/><ContentInput maxLength={300} placeholderId="ui.features-bookings-components-booking.5" placeholder="Stops in travel order" value={details.stops} onChange={e=>update("stops",e.target.value)}/></label><label><ContentText id="booking.20" fallback="Vehicle preference "/><select value={details.vehicle} onChange={e=>update("vehicle",e.target.value)}>{vehicles.map(v=><option key={v.name} value={v.name}>{v.name}</option>)}<option value={gmc}><ContentText id="booking.21" fallback="GMC vehicle"/></option><option value={civic}><ContentText id="booking.22" fallback="Honda Civic"/></option></select></label>{trip==="Round trip"&&<label><ContentText id="booking.23" fallback="Return date "/><input type="date" required min={details.date} value={details.returnDate} onChange={e=>update("returnDate",e.target.value)}/></label>}<span><ContentText id="booking.24" fallback="Availability and fares confirmed by our team."/></span></div></>:<div className="review-form"><div><span className="eyebrow"><ContentText id="booking.25" fallback="REVIEW YOUR JOURNEY · STEP 2 OF 3"/></span><h3>{details.pickup} ? {details.destination}</h3><p>{details.date}{" "}<ContentText id="ui.features-bookings-components-booking.2" fallback="at "/>{details.time} · {details.passengers} <ContentText id="booking.26" fallback=" passengers · "/>{trip}</p><p><strong>{estimate === null ? <ContentText id="booking.27" fallback="Estimated total: quote required in SAR"/> : `Estimated total: SAR ${estimate.toFixed(2)}`}</strong><br/><ContentText id="booking.28" fallback="No configured fare for this route. Ask for a complete quote, including any additional fees, before agreeing to travel."/></p><label><ContentText id="booking.29" fallback="Vehicle preference"/><select value={details.vehicle} onChange={e=>update("vehicle",e.target.value)}>{vehicles.map(v=><option key={v.name} value={v.name}>{v.name}</option>)}<option value={gmc}><ContentText id="booking.30" fallback="GMC vehicle"/></option><option value={civic}><ContentText id="booking.31" fallback="Honda Civic"/></option></select></label><small><ContentText id="booking.32" fallback="Vehicle categories and capacities shown on this site are illustrative. Actual vehicle and luggage fit require confirmation."/></small></div><div className="customer-fields"><label><ContentText id="booking.33" fallback="Your name"/><input required maxLength={80} autoComplete="name" value={details.name} onChange={e=>update("name",e.target.value)}/></label><label><ContentText id="booking.34" fallback="Contact number (with country code)"/><ContentInput type="tel" required maxLength={25} autoComplete="tel" placeholderId="ui.features-bookings-components-booking.6" placeholder="+966 …" value={details.phone} onChange={e=>update("phone",e.target.value)}/></label><label><ContentText id="booking.35" fallback="Luggage pieces"/><input type="number" min="0" max="30" value={details.luggage} onChange={e=>update("luggage",e.target.value)}/></label>{/airport/i.test(details.pickup+details.destination)&&<label><ContentText id="booking.36" fallback="Flight number (optional)"/><input maxLength={20} value={details.flight} onChange={e=>update("flight",e.target.value)}/></label>}<label><ContentText id="booking.37" fallback="Special requirements (optional)"/><textarea maxLength={600} value={details.notes} onChange={e=>update("notes",e.target.value)}/></label><small><ContentText id="booking.38" fallback="By continuing, you agree to the "/><a href="/privacy"><ContentText id="booking.39" fallback="privacy notice"/></a><ContentText id="booking.40" fallback=". No payment is collected."/></small><div className="actions"><button className="text-button" type="button" onClick={()=>setStep(0)}><ContentText id="booking.41" fallback="? Back"/></button><button className="button" type="submit" disabled={submitting}><ContentText id="booking.42" fallback="Prepare request "/><Icon/></button></div></div></div>}{error&&<p className="form-error" role="alert">{error}</p>}<datalist id="locations">{locations.map(l=><option key={l} value={l}/>)}</datalist></form>}</section>}
+  const when = details.date && details.time ? `${details.date} at ${details.time} (KSA)` : "Not selected";
+  const returning = details.roundTrip ? details.returnDate && details.returnTime ? `${details.returnDate} at ${details.returnTime} (KSA)` : "Not selected" : "One way";
+  const message = ["Hello Falak Rides, I would like to request a booking.", "", `Name: ${details.name.trim()}`, `Phone: ${details.phone.trim()}`, `Pickup: ${details.pickup.trim()}`, `Drop-off: ${details.destination.trim()}`, `Pickup time: ${when}`, `Return: ${returning}`, `Vehicle: ${details.vehicle}`, `Passengers: ${details.passengers}`, `Luggage: ${details.luggage}`, details.address.trim() ? `Pickup address: ${details.address.trim()}` : "", details.notes.trim() ? `Notes: ${details.notes.trim()}` : "", "", "Please confirm availability, the total fare in SAR, and the accepted payment method."].filter((line): line is string => typeof line === "string").join("\n");
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const issue = validate();
+    if (issue) {setError(issue); requestAnimationFrame(() => errorRef.current?.focus()); return;}
+    setError(""); setPreview(true);
+    const send = (event.nativeEvent as SubmitEvent).submitter?.getAttribute("value") === "whatsapp";
+    if (send) {
+      window.open(`${whatsapp}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+      setDirty(false); setStatus("Your request is prepared. Send it in WhatsApp so our team can confirm your ride.");
+    } else {summary.current?.scrollIntoView({behavior: "instant", block: "nearest"}); summary.current?.focus({preventScroll: true});}
+  }
+
+  return <form className="falak-booking" onSubmit={submit}>
+    <section className="falak-booking-details" aria-labelledby={`${listId}-details`}>
+      <div className="falak-booking-section-heading"><span className="falak-booking-step">01</span><div><h3 id={`${listId}-details`}>Booking details</h3><p>Your plans, your pace. Tell us about your journey.</p></div><span className="falak-booking-timezone"><Icon name="clock" size={14}/>KSA time</span></div>
+      <div className="falak-booking-grid">
+        <label>Full name<input name="name" autoComplete="name" required maxLength={80} placeholder="Your full name" value={details.name} onChange={event => update("name", event.target.value)}/></label>
+        <label>Phone number<input name="phone" type="tel" autoComplete="tel" required maxLength={25} placeholder="+966 5X XXX XXXX" value={details.phone} onChange={event => update("phone", event.target.value)}/></label>
+        <label>Pickup city / location<input name="pickup" list={listId} required maxLength={160} placeholder="Select or enter pickup" value={details.pickup} onChange={event => update("pickup", event.target.value)}/></label>
+        <label>Drop-off city / location<input name="destination" list={listId} required maxLength={160} placeholder="Select or enter destination" value={details.destination} onChange={event => update("destination", event.target.value)}/></label>
+        <DatePicker label="Pickup date" name="date" min={today} value={details.date} onChange={value => update("date", value)}/>
+        <label>Pickup time<input name="time" type="time" required value={details.time} onChange={event => update("time", event.target.value)}/></label>
+      </div>
+      <datalist id={listId}>{choices.map(location => <option key={location} value={location}/>)}</datalist>
+      <label className="falak-booking-return"><input type="checkbox" checked={details.roundTrip} onChange={event => update("roundTrip", event.target.checked)}/><span>Add a return journey<small>Plan your ride back, too.</small></span><Icon name="arrow" size={18}/></label>
+      {details.roundTrip && <div className="falak-booking-grid falak-booking-return-fields"><DatePicker label="Return date" name="returnDate" min={details.date && details.date > today ? details.date : today} value={details.returnDate} onChange={value => update("returnDate", value)} returnJourney/><label>Return time<input name="returnTime" type="time" required value={details.returnTime} onChange={event => update("returnTime", event.target.value)}/></label></div>}
+      <div className="falak-booking-grid falak-booking-vehicle-grid">
+        <label>Vehicle preference<select name="vehicle" required value={details.vehicle} onChange={event => update("vehicle", event.target.value)}><option value="" disabled>Choose your vehicle</option>{vehicles.map(item => <option key={item.name} value={item.name}>{item.name} - up to {item.passengers} passengers</option>)}</select></label>
+        <label>Passengers<select name="passengers" value={details.passengers} onChange={event => update("passengers", event.target.value)}>{Array.from({length: Math.max(1, ...vehicles.map(item => item.passengers))}, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label>
+        <label>Luggage<select name="luggage" value={details.luggage} onChange={event => update("luggage", event.target.value)}>{Array.from({length: Math.max(1, ...vehicles.map(item => item.bags)) + 1}, (_, index) => <option key={index} value={index}>{index} {index === 1 ? "bag" : "bags"}</option>)}</select></label>
+      </div>
+      {vehicle && <p className="falak-booking-capacity"><Icon name="car" size={15}/>Up to {vehicle.passengers} passengers and {vehicle.bags} bags. Actual vehicle confirmed with your quote.</p>}
+      <label className="falak-booking-wide">Pickup address <span>(optional)</span><input name="address" maxLength={250} placeholder="Hotel name, district or airport terminal" value={details.address} onChange={event => update("address", event.target.value)}/></label>
+      <label className="falak-booking-wide">Notes <span>(optional)</span><textarea name="notes" rows={2} maxLength={600} placeholder="Flight number, extra stops or special requirements" value={details.notes} onChange={event => update("notes", event.target.value)}/></label>
+      {error && <p className="falak-booking-error" role="alert" tabIndex={-1} ref={errorRef}>{error}</p>}
+    </section>
+    <aside className="falak-booking-summary" ref={summary} tabIndex={-1} aria-labelledby={`${listId}-summary`}>
+      <span className="falak-booking-summary-kicker"><Icon name="shield" size={16}/>PRIVATE RIDES. PERSONAL CARE.</span>
+      <div className="falak-booking-section-heading"><span className="falak-booking-step">02</span><div><h3 id={`${listId}-summary`}>Your booking summary</h3><p>{preview ? "Details checked. Ready for your confirmation." : "Review your details before sending."}</p></div></div>
+      <div className="falak-booking-route"><div><i/><span><small>PICKUP</small><strong>{details.pickup || "Your starting point"}</strong></span></div><div><i/><span><small>DROP-OFF</small><strong>{details.destination || "Your destination"}</strong></span></div></div>
+      <dl>{[["Name", details.name || "Not entered"], ["Phone", details.phone || "Not entered"], ["Pickup", when], ["Return", returning], ["Vehicle", details.vehicle || "Not selected"], ["Passengers / bags", `${details.passengers} / ${details.luggage}`], ...(details.address.trim() ? [["Pickup address", details.address]] : []), ...(details.notes.trim() ? [["Notes", details.notes]] : [])].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+      <div className="falak-booking-quote"><span>Total fare</span><strong>Get your quote <small>SAR</small></strong><p>Our team confirms availability and the full fare before you book.</p></div>
+      <div className="falak-booking-actions"><button type="submit" name="action" value="preview" className="falak-booking-preview"><Icon name="file" size={17}/>Preview summary</button><button type="submit" name="action" value="whatsapp" className="falak-booking-send"><Icon name="chat" size={20}/>Book on WhatsApp<Icon size={17}/></button></div>
+      {status && <p role="status" className="falak-booking-status">{status}</p>}
+    </aside>
+  </form>;
+}

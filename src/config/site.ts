@@ -1,1 +1,1 @@
-export const whatsapp = "https://wa.me/966567691863";
+export const whatsapp = "https://wa.me/966567691683";

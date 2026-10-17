@@ -11,12 +11,12 @@ const {bookingGradient,createRecordId}=context.exports;
 
 test('empty booking data produces a valid neutral chart',()=>{
   const gradient=bookingGradient([]);
-  assert.equal(gradient,'conic-gradient(#e6eae3 0% 100%)');
+  assert.equal(gradient,'conic-gradient(#f0f6e7 0% 100%)');
   assert.ok(!/NaN|Infinity/.test(gradient));
 });
 test('rejected bookings are counted rather than shown as cancelled',()=>{
   const gradient=bookingGradient([{id:'1',status:'Completed'},{id:'2',status:'Rejected'}]);
-  assert.ok(gradient.includes('#15803d 0% 50%'));
+  assert.ok(gradient.includes('#8dc73f 0% 50%'));
   assert.ok(gradient.includes('#d49e8e 50% 100%'));
 });
 test('new records can be created when randomUUID is unavailable',()=>{
