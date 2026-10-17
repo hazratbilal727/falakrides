@@ -1,0 +1,1 @@
+ALTER TABLE "WebConversation" ADD COLUMN "blocked" BOOLEAN NOT NULL DEFAULT false;

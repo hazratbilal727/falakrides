@@ -1,0 +1,27 @@
+import {websiteField} from "./website-model";
+import {db} from "@/lib/db";
+import {databaseCatalog} from "./database-catalog";
+import type {ContentDocument, ContentValues} from "./types";
+export {validateValues} from "./validation";
+
+export async function readContent(): Promise<ContentDocument> {
+  const [record, catalog] = await Promise.all([db.siteContent.findUniqueOrThrow({where: {id: "main"}}), databaseCatalog()]);
+  return {version: record.version, draft: {[websiteField.id]:websiteField.value,...record.draft as ContentValues}, published: {[websiteField.id]:websiteField.value,...record.published as ContentValues}, updatedAt: record.updatedAt.toISOString(), publishedAt: record.publishedAt?.toISOString() || null, catalog};
+}
+export async function updateContent(version: number, values: ContentValues, publish: boolean, userId?: string): Promise<ContentDocument> {
+  await db.$transaction(async tx => {
+    const result = await tx.siteContent.updateMany({where: {id: "main", version}, data: {version: {increment: 1}, draft: values, ...(publish ? {published: values, publishedAt: new Date()} : {})}});
+    if (result.count !== 1) throw new Error("CONFLICT");
+    if (publish) {
+      const vehicles = await tx.vehicle.findMany({where: {contentIndex: {not: null}}});
+      for (const vehicle of vehicles) {const prefix = `vehicle.${vehicle.contentIndex}`; await tx.vehicle.update({where: {id: vehicle.id}, data: {name: values[`${prefix}.name`] ?? vehicle.name, description: values[`${prefix}.description`] ?? vehicle.description, image: values[`${prefix}.image`] ?? vehicle.image, passengers: Number(values[`${prefix}.passengers`] ?? vehicle.passengers), luggage: Number(values[`${prefix}.bags`] ?? vehicle.luggage), version: {increment: 1}}});}
+      const routes = await tx.fare.findMany({where: {contentIndex: {not: null}}});
+      for (const route of routes) {const prefix = `route.${route.contentIndex}`; const [from, to] = route.route.split(" → "); await tx.fare.update({where: {id: route.id}, data: {route: `${values[`${prefix}.0`] ?? from} → ${values[`${prefix}.1`] ?? to}`, caption: values[`${prefix}.2`] ?? route.caption, image: values[`${prefix}.3`] ?? route.image, version: {increment: 1}}});}
+      const areas = await tx.serviceArea.findMany({where: {contentIndex: {not: null}}});
+      for (const area of areas) await tx.serviceArea.update({where: {id: area.id}, data: {name: values[`location.${area.contentIndex}`] ?? area.name, version: {increment: 1}}});
+      await tx.siteSettings.update({where: {id: "main"}, data: {name: values["company.name"], description: values["company.description"], phone: values["contact.phone"], email: values["contact.email"], version: {increment: 1}}});
+    }
+    await tx.auditLog.create({data: {userId, action: publish ? "publish" : "save-draft", resource: "content", recordId: "main"}});
+  });
+  return readContent();
+}

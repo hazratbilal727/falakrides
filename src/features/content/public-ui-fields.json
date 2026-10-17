@@ -1,0 +1,1040 @@
+[
+  {
+    "id": "ui.book-a-ride.1",
+    "section": "Page: book a ride",
+    "label": "title: Book a Ride",
+    "value": "Book a Ride"
+  },
+  {
+    "id": "ui.book-a-ride.2",
+    "section": "Page: book a ride",
+    "label": "Text: Review policies before confirming your ride.",
+    "value": "Review policies before confirming your ride."
+  },
+  {
+    "id": "ui.contact.1",
+    "section": "Page: contact",
+    "label": "Text: Call Our Team",
+    "value": "Call Our Team"
+  },
+  {
+    "id": "ui.contact.2",
+    "section": "Page: contact",
+    "label": "Text: Chat on WhatsApp",
+    "value": "Chat on WhatsApp"
+  },
+  {
+    "id": "ui.contact.3",
+    "section": "Page: contact",
+    "label": "Text: Discuss your travel plans",
+    "value": "Discuss your travel plans"
+  },
+  {
+    "id": "ui.contact.4",
+    "section": "Page: contact",
+    "label": "Text: Email Us",
+    "value": "Email Us"
+  },
+  {
+    "id": "ui.my-bookings.1",
+    "section": "Page: my bookings",
+    "label": "title: My Bookings",
+    "value": "My Bookings"
+  },
+  {
+    "id": "ui.my-bookings.2",
+    "section": "Page: my bookings",
+    "label": "description: Help with upcoming rides, booking history and cancellation requests.",
+    "value": "Help with upcoming rides, booking history and cancellation requests."
+  },
+  {
+    "id": "ui.my-bookings.3",
+    "section": "Page: my bookings",
+    "label": "Text: Contact booking support ?",
+    "value": "Contact booking support ?"
+  },
+  {
+    "id": "ui.offers.1",
+    "section": "Page: offers",
+    "label": "title: Travel Offers",
+    "value": "Travel Offers"
+  },
+  {
+    "id": "ui.offers.2",
+    "section": "Page: offers",
+    "label": "description: Explore published offers or ask our team for a quote tailored to your itine",
+    "value": "Explore published offers or ask our team for a quote tailored to your itinerary."
+  },
+  {
+    "id": "ui.offers.3",
+    "section": "Page: offers",
+    "label": "label: Plan Your Journey",
+    "value": "Plan Your Journey"
+  },
+  {
+    "id": "ui.offers.4",
+    "section": "Page: offers",
+    "label": "Text: Current",
+    "value": "Current"
+  },
+  {
+    "id": "ui.offers.5",
+    "section": "Page: offers",
+    "label": "Text: Travel Offers",
+    "value": "Travel Offers"
+  },
+  {
+    "id": "ui.offers.6",
+    "section": "Page: offers",
+    "label": "Text: Valid until",
+    "value": "Valid until "
+  },
+  {
+    "id": "ui.offers.7",
+    "section": "Page: offers",
+    "label": "Text: Ask About This Offer",
+    "value": "Ask About This Offer"
+  },
+  {
+    "id": "ui.offers.8",
+    "section": "Page: offers",
+    "label": "Text: A Quote for Your Journey",
+    "value": "A Quote for Your Journey"
+  },
+  {
+    "id": "ui.offers.9",
+    "section": "Page: offers",
+    "label": "Text: No special offers are currently published. Share your route and travel date",
+    "value": "No special offers are currently published. Share your route and travel dates for a current quote, or explore our suggested Umrah transport itineraries."
+  },
+  {
+    "id": "ui.offers.10",
+    "section": "Page: offers",
+    "label": "Text: Explore Packages",
+    "value": "Explore Packages"
+  },
+  {
+    "id": "ui.packages-slug-.1",
+    "section": "Page: packages slug ",
+    "label": "Text: Package",
+    "value": "Package "
+  },
+  {
+    "id": "ui.packages-slug-.2",
+    "section": "Page: packages slug ",
+    "label": "Text: Your Route",
+    "value": "Your Route"
+  },
+  {
+    "id": "ui.policies.1",
+    "section": "Page: policies",
+    "label": "title: Policies",
+    "value": "Policies"
+  },
+  {
+    "id": "ui.policies.2",
+    "section": "Page: policies",
+    "label": "Text: Privacy policy",
+    "value": "Privacy policy"
+  },
+  {
+    "id": "ui.policies.3",
+    "section": "Page: policies",
+    "label": "Text: Learn how your details are handled when preparing a request.",
+    "value": "Learn how your details are handled when preparing a request."
+  },
+  {
+    "id": "ui.policies.4",
+    "section": "Page: policies",
+    "label": "Text: Read the privacy notice",
+    "value": "Read the privacy notice"
+  },
+  {
+    "id": "ui.policies.5",
+    "section": "Page: policies",
+    "label": "Text: Terms of service",
+    "value": "Terms of service"
+  },
+  {
+    "id": "ui.policies.6",
+    "section": "Page: policies",
+    "label": "Text: Review how requests, quotes and confirmations work.",
+    "value": "Review how requests, quotes and confirmations work."
+  },
+  {
+    "id": "ui.policies.7",
+    "section": "Page: policies",
+    "label": "Text: Read the terms",
+    "value": "Read the terms"
+  },
+  {
+    "id": "ui.policies.8",
+    "section": "Page: policies",
+    "label": "Text: Refunds and cancellations",
+    "value": "Refunds and cancellations"
+  },
+  {
+    "id": "ui.policies.9",
+    "section": "Page: policies",
+    "label": "Text: A standard refund and cancellation schedule has not been published. Ask our",
+    "value": "A standard refund and cancellation schedule has not been published. Ask our team for the applicable terms before accepting a quote or making a payment."
+  },
+  {
+    "id": "ui.policies.10",
+    "section": "Page: policies",
+    "label": "Text: If your plans change, contact support with your reference and travel date. ",
+    "value": "If your plans change, contact support with your reference and travel date. Refund amounts, charges and processing times require confirmation."
+  },
+  {
+    "id": "ui.policies.11",
+    "section": "Page: policies",
+    "label": "Text: Contact support",
+    "value": "Contact support"
+  },
+  {
+    "id": "ui.privacy.1",
+    "section": "Page: privacy",
+    "label": "title: Privacy Policy",
+    "value": "Privacy Policy"
+  },
+  {
+    "id": "ui.privacy.2",
+    "section": "Page: privacy",
+    "label": "description: How Falak Rides handles information shared through this website.",
+    "value": "How Falak Rides handles information shared through this website."
+  },
+  {
+    "id": "ui.routes.1",
+    "section": "Page: routes",
+    "label": "title: Popular Routes",
+    "value": "Popular Routes"
+  },
+  {
+    "id": "ui.routes.2",
+    "section": "Page: routes",
+    "label": "description: Airport arrivals, hotel transfers, and connections between the holy cities.",
+    "value": "Airport arrivals, hotel transfers, and connections between the holy cities."
+  },
+  {
+    "id": "ui.routes.3",
+    "section": "Page: routes",
+    "label": "label: City-wise Services",
+    "value": "City-wise Services"
+  },
+  {
+    "id": "ui.routes.4",
+    "section": "Page: routes",
+    "label": "Text: Connecting",
+    "value": "Connecting"
+  },
+  {
+    "id": "ui.routes.5",
+    "section": "Page: routes",
+    "label": "Text: Your Destinations",
+    "value": "Your Destinations"
+  },
+  {
+    "id": "ui.routes.6",
+    "section": "Page: routes",
+    "label": "Text: Need another route or an extra stop?",
+    "value": "Need another route or an extra stop? "
+  },
+  {
+    "id": "ui.routes.7",
+    "section": "Page: routes",
+    "label": "Text: Share your itinerary with our team.",
+    "value": "Share your itinerary with our team."
+  },
+  {
+    "id": "ui.terms.1",
+    "section": "Page: terms",
+    "label": "title: Booking Terms",
+    "value": "Booking Terms"
+  },
+  {
+    "id": "ui.terms.2",
+    "section": "Page: terms",
+    "label": "description: Terms for planning, requesting, and confirming private transportation.",
+    "value": "Terms for planning, requesting, and confirming private transportation."
+  },
+  {
+    "id": "ui.vehicles.1",
+    "section": "Page: vehicles",
+    "label": "label: Current Catalog",
+    "value": "Current Catalog"
+  },
+  {
+    "id": "ui.vehicles.2",
+    "section": "Page: vehicles",
+    "label": "description: View the vehicles currently listed by our team, including passenger and lug",
+    "value": "View the vehicles currently listed by our team, including passenger and luggage capacities."
+  },
+  {
+    "id": "ui.vehicles.3",
+    "section": "Page: vehicles",
+    "label": "Text: Available Vehicle",
+    "value": "Available Vehicle"
+  },
+  {
+    "id": "ui.vehicles.4",
+    "section": "Page: vehicles",
+    "label": "Text: Information",
+    "value": "Information"
+  },
+  {
+    "id": "ui.components-layout-footer.1",
+    "section": "Shared footer",
+    "label": "Text: My Bookings",
+    "value": "My Bookings"
+  },
+  {
+    "id": "ui.components-layout-footer.2",
+    "section": "Shared footer",
+    "label": "Text: Your profile",
+    "value": "Your profile"
+  },
+  {
+    "id": "ui.components-layout-footer.3",
+    "section": "Shared footer",
+    "label": "Text: Terms and Conditions",
+    "value": "Terms and Conditions"
+  },
+  {
+    "id": "ui.components-layout-footer.4",
+    "section": "Shared footer",
+    "label": "Text: Privacy Policy",
+    "value": "Privacy Policy"
+  },
+  {
+    "id": "ui.components-layout-footer.5",
+    "section": "Shared footer",
+    "label": "Text: Booking Policies",
+    "value": "Booking Policies"
+  },
+  {
+    "id": "ui.components-layout-public-page.1",
+    "section": "Page banner & breadcrumb",
+    "label": "Text: Home",
+    "value": "Home"
+  },
+  {
+    "id": "ui.components-public-travel-inquiry.1",
+    "section": "Footer inquiry form",
+    "label": "Text: Your name",
+    "value": "Your name"
+  },
+  {
+    "id": "ui.components-public-travel-inquiry.2",
+    "section": "Footer inquiry form",
+    "label": "Text: Email address",
+    "value": "Email address"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.1",
+    "section": "Fleet labels",
+    "label": "Text: YOUR KIND OF COMFORT",
+    "value": "YOUR KIND OF COMFORT"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.2",
+    "section": "Fleet labels",
+    "label": "Text: Up to",
+    "value": "Up to "
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.3",
+    "section": "Fleet labels",
+    "label": "Text: passengers",
+    "value": "passengers"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.4",
+    "section": "Fleet labels",
+    "label": "Text: bags",
+    "value": "bags"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.5",
+    "section": "Fleet labels",
+    "label": "Text: luggage capacity",
+    "value": "luggage capacity"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.6",
+    "section": "Fleet labels",
+    "label": "Text: Fare in SAR",
+    "value": "Fare in SAR"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.7",
+    "section": "Fleet labels",
+    "label": "Text: On request",
+    "value": "On request"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.8",
+    "section": "Fleet labels",
+    "label": "Text: Add your route to check the published fare. Our team confirms the final veh",
+    "value": "Add your route to check the published fare. Our team confirms the final vehicle, luggage fit, and availability."
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.9",
+    "section": "Fleet labels",
+    "label": "Text: Continue with this vehicle",
+    "value": "Continue with this vehicle"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.10",
+    "section": "Fleet labels",
+    "label": "Text: Explore other vehicles",
+    "value": "Explore other vehicles"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.11",
+    "section": "Fleet labels",
+    "label": "Text: Vehicle unavailable",
+    "value": "Vehicle unavailable"
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.12",
+    "section": "Fleet labels",
+    "label": "Text: This vehicle is no longer listed. Please choose another option.",
+    "value": "This vehicle is no longer listed. Please choose another option."
+  },
+  {
+    "id": "ui.features-fleet-components-fleet.13",
+    "section": "Fleet labels",
+    "label": "Text: Back to vehicles",
+    "value": "Back to vehicles"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.1",
+    "section": "Booking form labels",
+    "label": "Text: Stops (optional)",
+    "value": "Stops (optional)"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.2",
+    "section": "Booking form labels",
+    "label": "Text: at",
+    "value": "at "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.1",
+    "section": "Booking popup",
+    "label": "Text: falak",
+    "value": "falak"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.2",
+    "section": "Booking popup",
+    "label": "Text: rides",
+    "value": "rides"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.3",
+    "section": "Booking popup",
+    "label": "Text: Your own private ride",
+    "value": "Your own private ride"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.4",
+    "section": "Booking popup",
+    "label": "Text: LET’S GET YOU THERE",
+    "value": "LET’S GET YOU THERE"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.5",
+    "section": "Booking popup",
+    "label": "Text: Map",
+    "value": "Map"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.6",
+    "section": "Booking popup",
+    "label": "Text: Search by name, address or landmark",
+    "value": "Search by name, address or landmark"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.7",
+    "section": "Booking popup",
+    "label": "Text: Swap",
+    "value": "Swap"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.8",
+    "section": "Booking popup",
+    "label": "Text: Or start with a popular journey",
+    "value": "Or start with a popular journey"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.9",
+    "section": "Booking popup",
+    "label": "Text: Stop",
+    "value": "Stop "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.10",
+    "section": "Booking popup",
+    "label": "Text: ＋ Add a stop",
+    "value": "＋ Add a stop "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.11",
+    "section": "Booking popup",
+    "label": "Text: Journey type",
+    "value": "Journey type"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.12",
+    "section": "Booking popup",
+    "label": "Text: Pickup date",
+    "value": "Pickup date"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.13",
+    "section": "Booking popup",
+    "label": "Text: Pickup time",
+    "value": "Pickup time "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.14",
+    "section": "Booking popup",
+    "label": "Text: (KSA)",
+    "value": "(KSA)"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.15",
+    "section": "Booking popup",
+    "label": "Text: Return date",
+    "value": "Return date"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.16",
+    "section": "Booking popup",
+    "label": "Text: Return time",
+    "value": "Return time "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.17",
+    "section": "Booking popup",
+    "label": "Text: (KSA)",
+    "value": "(KSA)"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.18",
+    "section": "Booking popup",
+    "label": "Text: Just you and your people.",
+    "value": "Just you and your people."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.19",
+    "section": "Booking popup",
+    "label": "Text: Every booking is a private ride. No shared pickups.",
+    "value": "Every booking is a private ride. No shared pickups."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.20",
+    "section": "Booking popup",
+    "label": "Text: Choose your vehicle",
+    "value": "Choose your vehicle"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.21",
+    "section": "Booking popup",
+    "label": "Text: suitable options",
+    "value": "suitable options"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.22",
+    "section": "Booking popup",
+    "label": "Text: passengers",
+    "value": "passengers"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.23",
+    "section": "Booking popup",
+    "label": "Text: bags",
+    "value": "bags"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.24",
+    "section": "Booking popup",
+    "label": "Text: More space needed for this trip",
+    "value": "More space needed for this trip"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.25",
+    "section": "Booking popup",
+    "label": "Text: Your group needs a larger vehicle. Reduce the quantities or contact our tea",
+    "value": "Your group needs a larger vehicle. Reduce the quantities or contact our team to arrange suitable transport."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.26",
+    "section": "Booking popup",
+    "label": "Text: YOUR JOURNEY",
+    "value": "YOUR JOURNEY"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.27",
+    "section": "Booking popup",
+    "label": "Text: Edit",
+    "value": "Edit"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.28",
+    "section": "Booking popup",
+    "label": "Text: Via",
+    "value": "Via "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.29",
+    "section": "Booking popup",
+    "label": "Text: Return:",
+    "value": "Return: "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.30",
+    "section": "Booking popup",
+    "label": "Text: KSA",
+    "value": "KSA"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.31",
+    "section": "Booking popup",
+    "label": "Text: passengers",
+    "value": "passengers"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.32",
+    "section": "Booking popup",
+    "label": "Text: bags",
+    "value": "bags"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.33",
+    "section": "Booking popup",
+    "label": "Text: Edit vehicle",
+    "value": "Edit vehicle"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.34",
+    "section": "Booking popup",
+    "label": "Text: Your name",
+    "value": "Your name"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.35",
+    "section": "Booking popup",
+    "label": "Text: Phone number",
+    "value": "Phone number"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.36",
+    "section": "Booking popup",
+    "label": "Text: Instructions for your driver",
+    "value": "Instructions for your driver "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.37",
+    "section": "Booking popup",
+    "label": "Text: Optional",
+    "value": "Optional"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.38",
+    "section": "Booking popup",
+    "label": "Text: Estimated fare",
+    "value": "Estimated fare"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.39",
+    "section": "Booking popup",
+    "label": "Text: Pricing will be available before a live booking is confirmed.",
+    "value": "Pricing will be available before a live booking is confirmed."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.40",
+    "section": "Booking popup",
+    "label": "Text: Your request is saved for review. The team confirms availability and the fi",
+    "value": "Your request is saved for review. The team confirms availability and the final fare."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.41",
+    "section": "Booking popup",
+    "label": "Text: BOOKING REFERENCE",
+    "value": "BOOKING REFERENCE"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.42",
+    "section": "Booking popup",
+    "label": "Text: Your request is awaiting confirmation",
+    "value": "Your request is awaiting confirmation"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.43",
+    "section": "Booking popup",
+    "label": "Text: Journey",
+    "value": "Journey"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.44",
+    "section": "Booking popup",
+    "label": "Text: Pickup",
+    "value": "Pickup"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.45",
+    "section": "Booking popup",
+    "label": "Text: Return",
+    "value": "Return"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.46",
+    "section": "Booking popup",
+    "label": "Text: KSA",
+    "value": "KSA"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.47",
+    "section": "Booking popup",
+    "label": "Text: Your ride",
+    "value": "Your ride"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.48",
+    "section": "Booking popup",
+    "label": "Text: passengers",
+    "value": "passengers"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.49",
+    "section": "Booking popup",
+    "label": "Text: Status",
+    "value": "Status"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.50",
+    "section": "Booking popup",
+    "label": "Text: Reschedule",
+    "value": "Reschedule"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.51",
+    "section": "Booking popup",
+    "label": "Text: Cancel booking",
+    "value": "Cancel booking"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.52",
+    "section": "Booking popup",
+    "label": "Text: Cancel this booking?",
+    "value": "Cancel this booking?"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.53",
+    "section": "Booking popup",
+    "label": "Text: You can create a new one at any time.",
+    "value": "You can create a new one at any time."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.54",
+    "section": "Booking popup",
+    "label": "Text: Yes, cancel booking",
+    "value": "Yes, cancel booking"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.55",
+    "section": "Booking popup",
+    "label": "Text: Keep it",
+    "value": "Keep it"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.56",
+    "section": "Booking popup",
+    "label": "Text: Plan another ride",
+    "value": "Plan another ride"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.57",
+    "section": "Booking popup",
+    "label": "Text: Close",
+    "value": "Close"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.58",
+    "section": "Booking popup",
+    "label": "Text: Illustrative map preview",
+    "value": "Illustrative map preview"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.59",
+    "section": "Booking popup",
+    "label": "Text: A LITTLE PEACE OF MIND",
+    "value": "A LITTLE PEACE OF MIND"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.60",
+    "section": "Booking popup",
+    "label": "Text: Your journey at a glance.",
+    "value": "Your journey at a glance."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.61",
+    "section": "Booking popup",
+    "label": "Text: PICKUP",
+    "value": "PICKUP"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.62",
+    "section": "Booking popup",
+    "label": "Text: STOP",
+    "value": "STOP "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.63",
+    "section": "Booking popup",
+    "label": "Text: DROP-OFF",
+    "value": "DROP-OFF"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.64",
+    "section": "Booking popup",
+    "label": "Text: When",
+    "value": "When"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.65",
+    "section": "Booking popup",
+    "label": "Text: Journey",
+    "value": "Journey"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.66",
+    "section": "Booking popup",
+    "label": "Text: Vehicle",
+    "value": "Vehicle"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.67",
+    "section": "Booking popup",
+    "label": "Text: Estimated fare",
+    "value": "Estimated fare "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.68",
+    "section": "Booking popup",
+    "label": "Text: For your private journey",
+    "value": "For your private journey"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.69",
+    "section": "Booking popup",
+    "label": "Text: SAR",
+    "value": "SAR"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.70",
+    "section": "Booking popup",
+    "label": "Text: Private rides, always",
+    "value": "Private rides, always"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.71",
+    "section": "Booking popup",
+    "label": "Text: Space for your journey",
+    "value": "Space for your journey"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.72",
+    "section": "Booking popup",
+    "label": "Text: A team ready to help",
+    "value": "A team ready to help"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.73",
+    "section": "Booking popup",
+    "label": "Text: FIND YOUR MEETING POINT",
+    "value": "FIND YOUR MEETING POINT"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.74",
+    "section": "Booking popup",
+    "label": "Text: Choose your",
+    "value": "Choose your "
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.75",
+    "section": "Booking popup",
+    "label": "Text: Map preview only. Live location selection will be available soon.",
+    "value": "Map preview only. Live location selection will be available soon."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.76",
+    "section": "Booking popup",
+    "label": "Text: ILLUSTRATIVE MAP · NOT A REAL LOCATION",
+    "value": "ILLUSTRATIVE MAP · NOT A REAL LOCATION"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.77",
+    "section": "Booking popup",
+    "label": "Text: address",
+    "value": "address"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-popup.78",
+    "section": "Booking popup",
+    "label": "Text: Use this address",
+    "value": "Use this address"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.1",
+    "section": "Booking history",
+    "label": "Text: Your bookings",
+    "value": "Your bookings"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.2",
+    "section": "Booking history",
+    "label": "Text: Loading your bookings...",
+    "value": "Loading your bookings..."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.3",
+    "section": "Booking history",
+    "label": "Text: No bookings have been requested on this device yet.",
+    "value": "No bookings have been requested on this device yet."
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.4",
+    "section": "Booking history",
+    "label": "Text: KSA",
+    "value": "KSA"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.5",
+    "section": "Booking history",
+    "label": "Text: passengers",
+    "value": "passengers"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.6",
+    "section": "Booking history",
+    "label": "Text: Reschedule",
+    "value": "Reschedule"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.7",
+    "section": "Booking history",
+    "label": "Text: Cancel",
+    "value": "Cancel"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.8",
+    "section": "Booking history",
+    "label": "Text: Cancel this booking?",
+    "value": "Cancel this booking?"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.9",
+    "section": "Booking history",
+    "label": "Text: Yes, cancel",
+    "value": "Yes, cancel"
+  },
+  {
+    "id": "ui.features-bookings-components-booking-history.10",
+    "section": "Booking history",
+    "label": "Text: Keep booking",
+    "value": "Keep booking"
+  },
+  {
+    "id": "ui.components-shared-whatsapp-chat.1",
+    "section": "WhatsApp labels",
+    "label": "Text: &times;",
+    "value": "&times;"
+  },
+  {
+    "id": "ui.components-shared-whatsapp-chat.2",
+    "section": "WhatsApp labels",
+    "label": "Text: &times;",
+    "value": "&times;"
+  },
+  {
+    "id": "ui.components-public-sections.1",
+    "section": "Shared section labels",
+    "label": "Text: Book This Journey",
+    "value": "Book This Journey "
+  },
+  {
+    "id": "ui.book-a-ride.3",
+    "section": "Page: book a ride",
+    "label": "Page introduction: Plan your pickup, destination and schedule. Our team confirms availability ",
+    "value": "Plan your pickup, destination and schedule. Our team confirms availability and the full fare in SAR."
+  },
+  {
+    "id": "ui.faq.1",
+    "section": "Page: faq",
+    "label": "Page introduction: Answers about booking private taxis, airport transfers, vehicle choices, fa",
+    "value": "Answers about booking private taxis, airport transfers, vehicle choices, fares, Ziyarat and cancellations."
+  },
+  {
+    "id": "ui.policies.12",
+    "section": "Page: policies",
+    "label": "Page introduction: Privacy, terms, refunds and cancellation information.",
+    "value": "Privacy, terms, refunds and cancellation information."
+  },
+  {
+    "id": "ui.components-forms-contact-form.1",
+    "section": "Contact form",
+    "label": "Placeholder: Full name",
+    "value": "Full name"
+  },
+  {
+    "id": "ui.components-forms-contact-form.2",
+    "section": "Contact form",
+    "label": "Placeholder: you@example.com",
+    "value": "you@example.com"
+  },
+  {
+    "id": "ui.components-forms-contact-form.3",
+    "section": "Contact form",
+    "label": "Placeholder: Tell us about your route, travel dates or any questions you have.",
+    "value": "Tell us about your route, travel dates or any questions you have."
+  },
+  {
+    "id": "ui.components-public-travel-inquiry.3",
+    "section": "Footer inquiry form",
+    "label": "Placeholder: Your name",
+    "value": "Your name"
+  },
+  {
+    "id": "ui.components-public-travel-inquiry.4",
+    "section": "Footer inquiry form",
+    "label": "Placeholder: Email address",
+    "value": "Email address"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.3",
+    "section": "Booking form labels",
+    "label": "Placeholder: Where from?",
+    "value": "Where from?"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.4",
+    "section": "Booking form labels",
+    "label": "Placeholder: Where to?",
+    "value": "Where to?"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.5",
+    "section": "Booking form labels",
+    "label": "Placeholder: Stops in travel order",
+    "value": "Stops in travel order"
+  },
+  {
+    "id": "ui.features-bookings-components-booking.6",
+    "section": "Booking form labels",
+    "label": "Placeholder: +966 …",
+    "value": "+966 …"
+  }
+]

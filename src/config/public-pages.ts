@@ -1,0 +1,1 @@
+export const publicPages = [["Home","/"],["Book a Ride","/book-a-ride"],["Our Services","/services"],["Popular Routes","/routes"],["Vehicles","/vehicles"],["Offers","/offers"],["About Us","/about"],["Contact & Support","/contact"],["FAQ","/faq"],["Policies","/policies"]] as const;
